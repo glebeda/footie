@@ -4,23 +4,39 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'Sign-ups';
 
 const addSignUp = async (gameId, playerId) => {
-  const params = {
-    TableName: TABLE_NAME,
-    Item: {
-      GameId: gameId,
-      PlayerId: playerId,
-      SignUpDate: new Date().toISOString(),
-    },
+    const checkParams = {
+      TableName: TABLE_NAME,
+      Key: {
+        GameId: gameId,
+        PlayerId: playerId,
+      },
+    };
+  
+    try {
+      // Check if the sign-up already exists
+      const { Item } = await dynamoDb.get(checkParams).promise();
+      if (Item) {
+        throw new Error('Player is already signed up for this game');
+      }
+  
+      // Define parameters for adding the sign-up
+      const addParams = {
+        TableName: TABLE_NAME,
+        Item: {
+          GameId: gameId,
+          PlayerId: playerId,
+          SignUpDate: new Date().toISOString(), 
+        },
+      };
+  
+      await dynamoDb.put(addParams).promise();
+      return addParams.Item;
+    } catch (error) {
+      console.error("Error in addSignUp:", error);
+      throw error;
+    }
   };
-
-  try {
-    await dynamoDb.put(params).promise();
-    return params.Item;
-  } catch (error) {
-    console.error("Error adding sign-up:", error);
-    throw new Error('Error adding sign-up');
-  }
-};
+  
 
 const getSignUpsForGame = async (gameId) => {
   const params = {

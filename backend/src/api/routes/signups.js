@@ -10,7 +10,11 @@ router.post('/', async (req, res) => {
         res.status(201).json(newSignUp);
     } catch (error) {
         console.error("Failed to create sign-up:", error);
-        res.status(500).json({ error: error.toString() });
+        if (error.message === 'Player is already signed up for this game') {
+            res.status(400).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
 });
 
