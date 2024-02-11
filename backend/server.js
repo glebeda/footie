@@ -12,11 +12,15 @@ AWS.config.update({
 const express = require('express');
 const bodyParser = require('body-parser');
 const gamesRoutes = require('./src/api/routes/games');
+const playerRoutes = require('./src/api/routes/players');
+const signupRoutes = require('./src/api/routes/signups'); 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json()); 
 app.use('/games', gamesRoutes);
+app.use('/players', playerRoutes);
+app.use('/signups', signupRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
