@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const signupModel = require('../../models/signupModel'); // Adjust the path as necessary
+const signupModel = require('../../models/signupModel'); 
+const signupService = require('../../services/signupService');
 
 // POST /signups - Create a new sign-up
 router.post('/', async (req, res) => {
     const { gameId, playerId } = req.body;
     try {
-        const newSignUp = await signupModel.addSignUp(gameId, playerId);
+        const newSignUp = await signupService.addSignUp(gameId, playerId);
         res.status(201).json(newSignUp);
     } catch (error) {
         console.error("Failed to create sign-up:", error);
-        if (error.message === 'Player is already signed up for this game') {
+        if (error.message === 'Player is already signed up for this game' || error.message === 'Cannot sign up, the game is already full') {
             res.status(400).json({ error: error.message });
         } else {
             res.status(500).json({ error: 'Internal server error' });

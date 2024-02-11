@@ -65,6 +65,25 @@ const updateGame = async (gameId, updateData) => {
   }
 };
 
+const updateGameStatus = async (gameId, status) => {
+    const params = {
+      TableName: TABLE_NAME,
+      Key: { GameId: gameId },
+      UpdateExpression: "set #status = :status",
+      ExpressionAttributeNames: { "#status": "Status" },
+      ExpressionAttributeValues: { ":status": status },
+      ReturnValues: "ALL_NEW",
+    };
+  
+    try {
+      const { Attributes } = await dynamoDb.update(params).promise();
+      return Attributes;
+    } catch (error) {
+      console.error("Error updating game status:", error);
+      throw new Error('Error updating game status');
+    }
+  };
+  
 const deleteGame = async (gameId) => {
   const params = {
     TableName: TABLE_NAME,
@@ -86,5 +105,6 @@ module.exports = {
   createGame,
   getGameById,
   updateGame,
+  updateGameStatus,
   deleteGame,
 };
