@@ -1,13 +1,18 @@
+const playerService = require('./playerService');
 const signupModel = require('../models/signupModel');
 const gameModel = require('../models/gameModel');
 
-async function addSignUp(gameId, playerId) {
+async function addSignUp(gameId, playerName) {
     
     // Retrieve the current game info to check its status and player limit
     const gameInfo = await gameModel.getGameById(gameId);
     if (gameInfo.Status === "FULL") {
         throw new Error('Cannot sign up, the game is already full');
     }    
+    
+    // Create player if it doesn't exist
+    const player = await playerService.ensureUniquePlayer(playerName);
+    const playerId = player.PlayerId;
     
     // Check if the sign-up already exists to prevent duplicates
     const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId);
