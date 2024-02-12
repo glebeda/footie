@@ -5,16 +5,21 @@ const signupService = require('../../services/signupService');
 
 // POST /signups - Create a new sign-up
 router.post('/', async (req, res) => {
-    const { gameId, playerId } = req.body;
+    const { gameId, playerName } = req.body;
     try {
-        const newSignUp = await signupService.addSignUp(gameId, playerId);
+        const newSignUp = await signupService.addSignUp(gameId, playerName);
         res.status(201).json(newSignUp);
     } catch (error) {
-        console.error("Failed to create sign-up:", error);
-        if (error.message === 'Player is already signed up for this game' || error.message === 'Cannot sign up, the game is already full') {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'Internal server error' });
+        console.error("Sign-up error:", error.message);
+        switch (error.message) {
+            case 'Player is already signed up for this game':
+                return res.status(409).json({ error: error.message });
+            case 'Cannot sign up, the game is already full':
+                return res.status(403).json({ error: error.message });
+            case 'Name parameter is required and must not be empty.':
+                return res.status(400).json({ error: error.message });
+            default:
+                return res.status(500).json({ error: 'Internal server error' });
         }
     }
 });
