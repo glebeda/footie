@@ -3,7 +3,6 @@ const router = express.Router();
 const signupModel = require('../../models/signupModel'); 
 const signupService = require('../../services/signupService');
 
-// POST /signups - Create a new sign-up
 router.post('/', async (req, res) => {
     const { gameId, playerName } = req.body;
     try {
@@ -24,7 +23,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET /signups/:gameId - Retrieve all sign-ups for a game
 router.get('/:gameId', async (req, res) => {
     const { gameId } = req.params;
     try {
@@ -36,15 +34,18 @@ router.get('/:gameId', async (req, res) => {
     }
 });
 
-// DELETE /signups - Delete a sign-up
-router.delete('/', async (req, res) => {
-    const { gameId, playerId } = req.body;
+router.delete('/:gameId/:playerId', async (req, res) => {
+    const { gameId, playerId } = req.params;
     try {
-        const result = await signupModel.deleteSignUp(gameId, playerId);
-        res.json(result);
+        const result = await signupService.cancelSignUp(gameId, playerId);
+        res.status(200).json({ message: 'Sign-up canceled successfully', ...result });
     } catch (error) {
-        console.error("Failed to delete sign-up:", error);
-        res.status(500).json({ error: error.toString() });
+        console.error("Cancel sign-up error:", error.message);
+        if (error.message === 'Sign-up does not exist') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     }
 });
 
