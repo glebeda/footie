@@ -4,11 +4,24 @@
       {
         "type": "node",
         "request": "launch",
-        "name": "Launch Backend",
+        "name": "Backend",
         "runtimeExecutable": "npm",
         "runtimeArgs": ["run", "start"],
         "cwd": "${workspaceFolder}/backend",
         "console": "integratedTerminal"
-      }
-    ]
-  }
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Jest Tests",
+        "program": "${workspaceFolder}/backend/node_modules/.bin/jest",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder}/backend",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "openOnSessionStart",
+        "env": {
+            "NODE_ENV": "test"
+        }
+    }
+  ]
+}
