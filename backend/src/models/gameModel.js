@@ -64,7 +64,7 @@ const updateGame = async (gameId, updateData) => {
     throw new Error('Error updating the game');
   }
 };
-
+//test change
 const updateGameStatus = async (gameId, status) => {
     const params = {
       TableName: TABLE_NAME,
