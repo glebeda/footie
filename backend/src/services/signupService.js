@@ -46,7 +46,8 @@ async function cancelSignUp(gameId, playerId) {
     // Check if the game's status needs to be updated
     const signUps = await signupModel.getSignUpsForGame(gameId);
     const gameInfo = await gameModel.getGameById(gameId);
-    if (gameInfo.Status === "FULL" && signUps.length > gameInfo.MaxPlayers) {
+    //fixing test
+    if (gameInfo.Status === "FULL" && signUps.length < gameInfo.MaxPlayers) {
         await gameModel.updateGameStatus(gameId, GameStatus.OPEN);
     }
 
