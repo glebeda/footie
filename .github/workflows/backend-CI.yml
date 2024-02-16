@@ -9,7 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./backend/
     strategy:
       matrix:
         node-version: [18.x, 20.x]
@@ -21,7 +23,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Go to backend directory
-      run: cd backend
+      run: pwd
     - name: Install dependencies
       run: npm ci
     - name: Run Jest
