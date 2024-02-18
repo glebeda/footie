@@ -10,9 +10,13 @@ AWS.config.update({
 });
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors({
+  origin: 'http://localhost:3001' // React app
+}));
 app.use(express.json());
 
 const gamesRoutes = require('./src/api/routes/games');
