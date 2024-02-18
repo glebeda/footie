@@ -19,6 +19,7 @@
   "homepage": "https://github.com/glebeda/footie#readme",
   "dependencies": {
     "aws-sdk": "^2.1555.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.2",
     "express": "^4.18.2",
     "uuid": "^9.0.1"
