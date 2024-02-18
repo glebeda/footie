@@ -33,12 +33,20 @@ const gameService = {
     
         // Fetch player details for each sign-up. Consider performance improvement here
         const signUpsWithPlayerNames = await Promise.all(signUps.map(async (signUp) => {
-            const player = await PlayerService.getPlayerById(signUp.PlayerId);
-            return {
-                ...signUp,
-                PlayerName: player ? player.Name : 'Unknown',
-            };
-        }))
+            try {
+                const player = await PlayerService.getPlayerById(signUp.PlayerId);
+                return {
+                    ...signUp,
+                    PlayerName: player.Name,
+                };
+            } catch (error) {
+                // Handling the case where player details couldn't be fetched
+                return {
+                    ...signUp,
+                    PlayerName: 'Unknown', // Defaulting to 'Unknown'
+                };
+            }
+        }));
 
         return {
             game: openGame,
