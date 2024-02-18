@@ -12,6 +12,19 @@ const PlayerService = {
         return player;
     },
 
+    async getPlayerById(playerId) {
+        try {
+            const player = await playerModel.getPlayerById(playerId);
+            if (!player) {
+                throw new Error(`Player not found with ID: ${playerId}`);
+            }
+            return player;
+        } catch (error) {
+            console.error("Error in PlayerService.getPlayerById:", error);
+            throw error; 
+        }
+    },
+
 };
 
 module.exports = PlayerService;

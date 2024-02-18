@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const { v4: uuidv4 } = require('uuid'); 
+const GameStatus = require('../constants/gameStatus');
 
 const TABLE_NAME = 'Games';
 
@@ -101,10 +102,37 @@ const deleteGame = async (gameId) => {
   }
 };
 
+const findOpenGame = async () => {
+  const params = {
+    TableName: TABLE_NAME,
+    FilterExpression: "#status = :statusVal",
+    ExpressionAttributeNames: {
+      "#status": "Status",
+    },
+    ExpressionAttributeValues: {
+      ":statusVal": GameStatus.OPEN,
+    },
+  };
+
+  try {
+    const result = await dynamoDb.scan(params).promise();
+    if (result.Items.length > 0) {
+      // Assuming only one game can be OPEN at a time
+      return result.Items[0];
+    } else {
+      throw new Error('No open games found');
+    }
+  } catch (error) {
+    console.error("Error finding open game:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createGame,
   getGameById,
   updateGame,
   updateGameStatus,
   deleteGame,
+  findOpenGame,
 };
