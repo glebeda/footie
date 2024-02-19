@@ -69,7 +69,8 @@ async function getSignUpsForGame(gameId) {
 
     try {
         const data = await dynamoDb.query(params).promise();
-        return data.Items; 
+        const sortedSignUps = data.Items.sort((a, b) => new Date(a.SignUpDate) - new Date(b.SignUpDate));
+        return sortedSignUps;
     } catch (error) {
         console.error("Error retrieving sign-ups for game:", error);
         throw new Error('Error retrieving sign-ups for game');
