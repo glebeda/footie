@@ -102,28 +102,32 @@ const deleteGame = async (gameId) => {
   }
 };
 
-const findOpenGame = async () => {
+const findUpcomingGame = async () => {
   const params = {
     TableName: TABLE_NAME,
-    FilterExpression: "#status = :statusVal",
+    FilterExpression: "#status <> :playedStatus",
     ExpressionAttributeNames: {
       "#status": "Status",
     },
     ExpressionAttributeValues: {
-      ":statusVal": GameStatus.OPEN,
+      ":playedStatus": GameStatus.PLAYED,
     },
   };
 
   try {
     const result = await dynamoDb.scan(params).promise();
-    if (result.Items.length > 0) {
-      // Assuming only one game can be OPEN at a time
-      return result.Items[0];
+    // Filter for OPEN or FULL games and sort by Date to find the most upcoming game
+    const upcomingGames = result.Items.filter(item => 
+      item.Status === GameStatus.OPEN || item.Status === GameStatus.FULL
+    ).sort((a, b) => new Date(a.Date) - new Date(b.Date));
+
+    if (upcomingGames.length > 0) {
+      return upcomingGames[0];
     } else {
-      throw new Error('No open games found');
+      throw new Error('No upcoming games found');
     }
   } catch (error) {
-    console.error("Error finding open game:", error);
+    console.error("Error finding upcoming game:", error);
     throw error;
   }
 };
@@ -134,5 +138,5 @@ module.exports = {
   updateGame,
   updateGameStatus,
   deleteGame,
-  findOpenGame,
+  findUpcomingGame,
 };

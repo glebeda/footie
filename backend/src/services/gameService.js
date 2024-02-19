@@ -26,10 +26,10 @@ const gameService = {
         }
     },
 
-    async getOpenGameWithSignups() {
-        const openGame = await Game.findOpenGame();
-        if (!openGame) throw new Error('No open games found.');
-        const signUps = await SignupService.getSignUpsForGame(openGame.GameId);
+    async getUpcomingGameWithSignups() {
+        const upcomingGame = await Game.findUpcomingGame();
+        if (!upcomingGame) throw new Error('No upcoming games found.');
+        const signUps = await SignupService.getSignUpsForGame(upcomingGame.GameId);
     
         // Fetch player details for each sign-up. Consider performance improvement here
         const signUpsWithPlayerNames = await Promise.all(signUps.map(async (signUp) => {
@@ -49,7 +49,7 @@ const gameService = {
         }));
 
         return {
-            game: openGame,
+            game: upcomingGame,
             signUps: signUpsWithPlayerNames
         }
     },
