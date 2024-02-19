@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
 
 router.get('/open/signups', async (req, res) => {
   try {
-    const data = await gameService.getOpenGameWithSignups();
+    const data = await gameService.getUpcomingGameWithSignups();
     res.json(data);
   } catch (error) {
     res.status(404).json({ message: error.message });

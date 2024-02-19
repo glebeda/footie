@@ -43,45 +43,63 @@ describe('gameService', () => {
     });
   });
 
-  describe('getOpenGameWithSignups', () => {
-    it('successfully retrieves an open game with signups and player names', async () => {
+  describe('getUpcomingGameWithSignups', () => {
+    it('successfully retrieves an upcoming OPEN game with signups and player names', async () => {
       const mockGame = { GameId: 'openGameId', Status: 'OPEN', MaxPlayers: 10, Date: '2024-04-01', Location: 'Local Sports Center' };
       const mockSignUps = [{ PlayerId: 'playerId1', SignUpDate: '2024-02-18' }];
       const mockPlayer = { PlayerId: 'playerId1', Name: 'Mister Trololo' };
 
-      Game.findOpenGame.mockResolvedValue(mockGame);
+      Game.findUpcomingGame.mockResolvedValue(mockGame);
       SignupService.getSignUpsForGame.mockResolvedValue(mockSignUps);
       PlayerService.getPlayerById.mockResolvedValue(mockPlayer);
 
-      const result = await gameService.getOpenGameWithSignups();
+      const result = await gameService.getUpcomingGameWithSignups();
 
       expect(result.game).toEqual(mockGame);
       expect(result.signUps).toEqual([{ ...mockSignUps[0], PlayerName: mockPlayer.Name }]);
-      expect(Game.findOpenGame).toHaveBeenCalled();
+      expect(Game.findUpcomingGame).toHaveBeenCalled();
       expect(SignupService.getSignUpsForGame).toHaveBeenCalledWith(mockGame.GameId);
       expect(PlayerService.getPlayerById).toHaveBeenCalledWith('playerId1');
     });
 
-    it('throws an error if no open games are found', async () => {
-      Game.findOpenGame.mockResolvedValue(null);
+    it('successfully retrieves an upcoming FULL game with signups and player names', async () => {
+        const mockGame = { GameId: 'openGameId', Status: 'FULL', MaxPlayers: 10, Date: '2024-05-15', Location: 'Chingford Goals Pitch' };
+        const mockSignUps = [{ PlayerId: 'playerId1', SignUpDate: '2024-02-18' }];
+        const mockPlayer = { PlayerId: 'playerId1', Name: 'Vinnie Jones' };
+  
+        Game.findUpcomingGame.mockResolvedValue(mockGame);
+        SignupService.getSignUpsForGame.mockResolvedValue(mockSignUps);
+        PlayerService.getPlayerById.mockResolvedValue(mockPlayer);
+  
+        const result = await gameService.getUpcomingGameWithSignups();
+  
+        expect(result.game).toEqual(mockGame);
+        expect(result.signUps).toEqual([{ ...mockSignUps[0], PlayerName: mockPlayer.Name }]);
+        expect(Game.findUpcomingGame).toHaveBeenCalled();
+        expect(SignupService.getSignUpsForGame).toHaveBeenCalledWith(mockGame.GameId);
+        expect(PlayerService.getPlayerById).toHaveBeenCalledWith('playerId1');
+      });
 
-      await expect(gameService.getOpenGameWithSignups()).rejects.toThrow('No open games found.');
-      expect(Game.findOpenGame).toHaveBeenCalled();
+    it('throws an error if no upcoming games are found', async () => {
+      Game.findUpcomingGame.mockResolvedValue(null);
+
+      await expect(gameService.getUpcomingGameWithSignups()).rejects.toThrow('No upcoming games found.');
+      expect(Game.findUpcomingGame).toHaveBeenCalled();
     });
 
-    it('returns the open game with an empty list of sign-ups if no sign-ups are found', async () => {
-        Game.findOpenGame.mockResolvedValue({ GameId: 'openGameId', Status: 'OPEN' });
+    it('returns the upcoming game with an empty list of sign-ups if no sign-ups are found', async () => {
+        Game.findUpcomingGame.mockResolvedValue({ GameId: 'openGameId', Status: 'OPEN' });
         SignupService.getSignUpsForGame.mockResolvedValue([]);
       
-        const result = await gameService.getOpenGameWithSignups();
+        const result = await gameService.getUpcomingGameWithSignups();
       
         expect(result.game.Status).toEqual('OPEN');
         expect(result.signUps).toEqual([]);
-        expect(Game.findOpenGame).toHaveBeenCalled();
+        expect(Game.findUpcomingGame).toHaveBeenCalled();
         expect(SignupService.getSignUpsForGame).toHaveBeenCalledWith('openGameId');
       });
 
-      it('returns the open game with all sign-ups and their corresponding player names', async () => {
+      it('returns the upcoming game with all sign-ups and their corresponding player names', async () => {
         const mockGame = { GameId: 'openGameId', Status: 'OPEN' };
         const mockSignUps = [
           { PlayerId: 'player1', SignUpDate: '2024-01-01' },
@@ -92,13 +110,13 @@ describe('gameService', () => {
           { PlayerId: 'player2', Name: 'Confused' }
         ];
       
-        Game.findOpenGame.mockResolvedValue(mockGame);
+        Game.findUpcomingGame.mockResolvedValue(mockGame);
         SignupService.getSignUpsForGame.mockResolvedValue(mockSignUps);
         PlayerService.getPlayerById.mockImplementation(playerId =>
           Promise.resolve(mockPlayers.find(player => player.PlayerId === playerId))
         );
       
-        const result = await gameService.getOpenGameWithSignups();
+        const result = await gameService.getUpcomingGameWithSignups();
       
         expect(result.game).toEqual(mockGame);
         expect(result.signUps).toHaveLength(2);
@@ -110,11 +128,11 @@ describe('gameService', () => {
         const mockGame = { GameId: 'openGameId', Status: 'OPEN' };
         const mockSignUps = [{ PlayerId: 'player1', SignUpDate: '2024-01-01' }];
       
-        Game.findOpenGame.mockResolvedValue(mockGame);
+        Game.findUpcomingGame.mockResolvedValue(mockGame);
         SignupService.getSignUpsForGame.mockResolvedValue(mockSignUps);
         PlayerService.getPlayerById.mockRejectedValue(new Error('Player not found'));
       
-        const result = await gameService.getOpenGameWithSignups();
+        const result = await gameService.getUpcomingGameWithSignups();
       
         expect(result.signUps).toHaveLength(1);
         expect(result.signUps[0].PlayerName).toEqual('Unknown');
