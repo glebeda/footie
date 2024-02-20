@@ -23,6 +23,19 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/upcoming', async (req, res) => {
+    try {
+        const data = await signupService.getUpcomingGameWithSignups();
+        res.json(data);
+    } catch (error) {
+        if (error.message === 'No upcoming games found') {
+            res.status(404).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+});
+
 router.get('/:gameId', async (req, res) => {
     const { gameId } = req.params;
     try {
