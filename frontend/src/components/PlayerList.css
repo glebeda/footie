@@ -1,0 +1,13 @@
+@keyframes fadeInHighlight {
+    from {
+      background-color: #d4edda;
+    }
+    to {
+      background-color: transparent;
+    }
+  }
+  
+  .highlighted-row {
+    animation: fadeInHighlight 2s forwards;
+  }
+  
