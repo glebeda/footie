@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const gameModel = require('../../models/gameModel');
-const gameService = require('../../services/gameService');
 
 // POST /games - Create a new game
 router.post('/', async (req, res) => {
@@ -26,15 +25,6 @@ router.get('/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.toString() });
-  }
-});
-
-router.get('/open/signups', async (req, res) => {
-  try {
-    const data = await gameService.getUpcomingGameWithSignups();
-    res.json(data);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
   }
 });
 

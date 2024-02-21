@@ -1,4 +1,4 @@
-const playerService = require('./playerService');
+const PlayerService = require('./playerService');
 const signupModel = require('../models/signupModel');
 const GameService = require('../services/gameService');
 const GameStatus = require('../constants/gameStatus');
@@ -10,7 +10,7 @@ const signUpService = {
             throw new Error('Cannot sign up, the game is already full');
         }
 
-        const player = await playerService.ensureUniquePlayer(playerName);
+        const player = await PlayerService.ensureUniquePlayer(playerName);
         const playerId = player.PlayerId;
 
         const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId);
@@ -54,6 +54,35 @@ const signUpService = {
             throw error;
         }
     },
+
+    async getUpcomingGameWithSignups() {
+        const upcomingGame = await GameService.findUpcomingGame();
+        if (!upcomingGame) throw new Error('No upcoming games found.');
+        const signUps = await this.getSignUpsForGame(upcomingGame.GameId);
+    
+        // Fetch player details for each sign-up. Consider performance improvement here
+        const signUpsWithPlayerNames = await Promise.all(signUps.map(async (signUp) => {
+            try {
+                const player = await PlayerService.getPlayerById(signUp.PlayerId);
+                return {
+                    ...signUp,
+                    PlayerName: player.Name,
+                };
+            } catch (error) {
+                // Handling the case where player details couldn't be fetched
+                return {
+                    ...signUp,
+                    PlayerName: 'Unknown', // Defaulting to 'Unknown'
+                };
+            }
+        }));
+
+        return {
+            game: upcomingGame,
+            signUps: signUpsWithPlayerNames
+        }
+    },
+
 };
 
 module.exports = signUpService;
