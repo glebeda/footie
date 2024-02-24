@@ -21,9 +21,12 @@ export const signupSlice = createSlice({
     setHasPaid: (state, action) => {
       state.hasPaid = action.payload;
     },
+    removePlayer: (state, action) => {
+      state.players = state.players.filter(player => player.PlayerId !== action.payload.playerId);
+    },
   },
 });
 
-export const { setPlayers, setGameDetails, setHasSignedUp, setHasPaid } = signupSlice.actions;
+export const { setPlayers, setGameDetails, setHasSignedUp, setHasPaid, removePlayer } = signupSlice.actions;
 
 export default signupSlice.reducer;

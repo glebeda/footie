@@ -15,3 +15,12 @@ export const signUpPlayer = (signUpDetails) => {
       throw new Error('There was an error signing up the player:', error);
     });
 };
+
+export const cancelSignUp = (gameId, playerId) => {
+  return axios.delete(`/signups/${gameId}/${playerId}`)
+    .then(response => response.data)
+    .catch(error => {
+      console.error('There was an error canceling the signup:', error);
+      throw error;
+    });
+};

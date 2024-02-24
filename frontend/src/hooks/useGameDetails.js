@@ -1,24 +1,30 @@
+import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { setPlayers, setGameDetails } from '../redux/slices/signupSlice';
-import axios from '../api/axios';
+import { fetchGameDetails } from '../api/signupService';
 
 export const useGameDetails = () => {
   const dispatch = useDispatch();
 
-  const fetchAndSetGameDetails = async () => {
+  const fetchAndSetGameDetails = useCallback(async () => {
     try {
-      const response = await axios.get('/signups/upcoming');
-      const { game, signUps } = response.data;
+      const { game, signUps } = await fetchGameDetails();
       dispatch(setGameDetails(game));
       dispatch(setPlayers(signUps.map(signUp => ({
         ...signUp,
         name: signUp.PlayerName,
-        hasPaid: false
+        playerId: signUp.PlayerId,
+        gameId: game.GameId,
+        hasPaid: false, //Placeholder for now
       }))));
     } catch (error) {
       console.error('There was an error fetching the game details:', error);
     }
-  };
+  }, [dispatch]);
 
-  return fetchAndSetGameDetails;
+  useEffect(() => {
+    fetchAndSetGameDetails();
+  }, [fetchAndSetGameDetails]);
+
+  return { fetchAndSetGameDetails };
 };
