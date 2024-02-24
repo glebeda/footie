@@ -25,7 +25,7 @@ const SignUpPage = () => {
         playerName
       });
       setPlayerName('');
-      setHighlightedIndex(players.length);
+      setHighlightedIndex(playerName);
       await fetchAndSetGameDetails();
     } catch (error) {
       console.error(error.message);

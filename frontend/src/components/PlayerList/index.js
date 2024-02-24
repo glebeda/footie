@@ -66,7 +66,7 @@ function PlayerList({ players, maxPlayers, highlightedIndex }) {
           {players.map((player, index) => (
             <TableRow
                 key={player.name}
-                className={index === highlightedIndex ? 'highlighted-row' : ''}  
+                className={player.name === highlightedIndex ? 'highlighted-row' : ''}  
                 >
                 {/* ... */}
               <TableCell component="th" scope="row">
