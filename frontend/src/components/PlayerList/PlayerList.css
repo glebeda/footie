@@ -10,9 +10,4 @@
   .highlighted-row {
     animation: fadeInHighlight 2s forwards;
   }
-
-  .cancel-icon-cell {
-    width: 1%;  
-    white-space: nowrap;
-  }
   

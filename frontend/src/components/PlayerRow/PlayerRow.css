@@ -1,0 +1,9 @@
+.cancel-icon-cell {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.row-swiping {
+    transform: translateX(10px);
+    transition: transform 0.3s ease;
+}
