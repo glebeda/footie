@@ -1,4 +1,8 @@
-const { addSignUp, cancelSignUp } = require('../../src/services/signupService')
+const {
+  addSignUp,
+  cancelSignUp,
+  updateSignUpPaymentStatus
+} = require('../../src/services/signupService')
 const signupModel = require('../../src/models/signupModel')
 const gameModel = require('../../src/models/gameModel')
 const playerService = require('../../src/services/playerService')
@@ -6,7 +10,8 @@ jest.mock('../../src/models/signupModel', () => ({
   addSignUp: jest.fn().mockResolvedValue(true),
   checkSignUpExists: jest.fn().mockResolvedValue(false),
   getSignUpsForGame: jest.fn().mockResolvedValue([]),
-  deleteSignUp: jest.fn().mockResolvedValue({})
+  deleteSignUp: jest.fn().mockResolvedValue({}),
+  updatePaymentStatus: jest.fn().mockResolvedValue({ Paid: false })
 }))
 
 jest.mock('../../src/models/gameModel', () => ({
@@ -139,6 +144,57 @@ describe('signupService', () => {
       expect(gameModel.updateGameStatus).toHaveBeenCalledWith(
         'Tuesday Game',
         'OPEN'
+      )
+    })
+  })
+
+  describe('updateSignUpPaymentStatus', () => {
+    it('successfully updates the payment status to paid', async () => {
+      const gameId = 'Tuesday Game'
+      const playerId = 'qwerty'
+      const paid = true
+      signupModel.updatePaymentStatus.mockResolvedValue({ Paid: true })
+
+      const result = await updateSignUpPaymentStatus(gameId, playerId, paid)
+
+      expect(result).toHaveProperty('Paid', true)
+      expect(signupModel.updatePaymentStatus).toHaveBeenCalledWith(
+        gameId,
+        playerId,
+        true
+      )
+    })
+
+    it('successfully updates the payment status to unpaid', async () => {
+      const gameId = 'Sunday Game'
+      const playerId = 'Silva'
+      const paid = false
+      signupModel.updatePaymentStatus.mockResolvedValue({ Paid: false })
+
+      const result = await updateSignUpPaymentStatus(gameId, playerId, paid)
+
+      expect(result).toHaveProperty('Paid', false)
+      expect(signupModel.updatePaymentStatus).toHaveBeenCalledWith(
+        gameId,
+        playerId,
+        false
+      )
+    })
+
+    it('throws an error if the update fails', async () => {
+      const gameId = 'Friday Game'
+      const playerId = 'valera'
+      const paid = true
+      const errorMessage = 'Error updating payment status'
+      signupModel.updatePaymentStatus.mockRejectedValue(new Error(errorMessage))
+
+      await expect(
+        updateSignUpPaymentStatus(gameId, playerId, paid)
+      ).rejects.toThrow(errorMessage)
+      expect(signupModel.updatePaymentStatus).toHaveBeenCalledWith(
+        gameId,
+        playerId,
+        paid
       )
     })
   })
