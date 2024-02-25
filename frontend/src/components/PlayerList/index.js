@@ -88,6 +88,8 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
                 <TableCell align='right'>
                   <Checkbox disabled />
                 </TableCell>
+                <TableCell align='right'>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
