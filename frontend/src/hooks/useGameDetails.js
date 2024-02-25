@@ -15,7 +15,7 @@ export const useGameDetails = () => {
         name: signUp.PlayerName,
         playerId: signUp.PlayerId,
         gameId: game.GameId,
-        hasPaid: false, //Placeholder for now
+        hasPaid: signUp.Paid,
       }))));
     } catch (error) {
       console.error('There was an error fetching the game details:', error);

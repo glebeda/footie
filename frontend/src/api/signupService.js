@@ -24,3 +24,13 @@ export const cancelSignUp = (gameId, playerId) => {
       throw error;
     });
 };
+
+export const updatePaymentStatus = (gameId, playerId, paid) => {
+  const endpoint = `/signups/${gameId}/${playerId}/${paid ? 'pay' : 'unpay'}`;
+  return axios.patch(endpoint)
+    .then(response => response.data)
+    .catch(error => {
+      console.error('There was an error updating the payment status:', error);
+      throw error;
+    });
+};
