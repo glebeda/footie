@@ -4,7 +4,7 @@ import './PlayerRow.css'
 import { useSwipeable } from 'react-swipeable'
 import { TableCell, TableRow, Checkbox, IconButton } from '@mui/material'
 
-const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex }) => {
+const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemoving }) => {
     const [isSwiping, setIsSwiping] = useState(false);
 
   const swipeHandlers = useSwipeable({
@@ -22,7 +22,8 @@ const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex }) => {
 
   const rowClasses = [
     isSwiping ? 'row-swiping' : '',
-    index === highlightedIndex ? 'highlighted-row' : ''
+    index === highlightedIndex ? 'highlighted-row' : '',
+    isRemoving ? 'removing' : '',
   ].filter(Boolean).join(' ');
 
   return (

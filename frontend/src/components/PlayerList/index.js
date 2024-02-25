@@ -21,6 +21,7 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [removingPlayerId, setRemovingPlayerId] = useState(null);
   const dispatch = useDispatch()
 
   const handleOpenDialog = player => {
@@ -38,9 +39,13 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
       try {
         await cancelSignUp(selectedPlayer.gameId, selectedPlayer.playerId)
         console.log('Sign-up canceled successfully')
-        handleCloseDialog()
-        dispatch(removePlayer({ playerId: selectedPlayer.playerId }))
-        setErrorMessage('')
+        setRemovingPlayerId(selectedPlayer.playerId);
+        setTimeout(() => {
+          dispatch(removePlayer({ playerId: selectedPlayer.playerId }));
+          setRemovingPlayerId(null);
+        }, 1000); 
+        handleCloseDialog();
+        setErrorMessage('');
       } catch (error) {
         console.error('Failed to cancel sign-up:', error)
         handleCloseDialog()
@@ -71,6 +76,7 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
                 highlightedIndex={
                   highlightedIndex === player.name ? index : null
                 }
+                isRemoving={removingPlayerId === player.playerId}
               />
             ))}
             {Array.from({ length: maxPlayers - players.length }, (_, index) => (
