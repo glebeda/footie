@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import PaidCheckbox from '../PaidCheckbox';
 import CancelIcon from '@mui/icons-material/Cancel'
 import './PlayerRow.css'
 import { useSwipeable } from 'react-swipeable'
-import { TableCell, TableRow, Checkbox, IconButton } from '@mui/material'
+import { TableCell, TableRow, IconButton } from '@mui/material'
 
-const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemoving }) => {
+const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemoving, showAlert, hideAlert }) => {
     const [isSwiping, setIsSwiping] = useState(false);
 
   const swipeHandlers = useSwipeable({
@@ -19,7 +20,7 @@ const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemovi
       }
     },
   })
-
+  
   const rowClasses = [
     isSwiping ? 'row-swiping' : '',
     index === highlightedIndex ? 'highlighted-row' : '',
@@ -33,9 +34,10 @@ const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemovi
       </TableCell>
       <TableCell>{player.name}</TableCell>
       <TableCell align='right'>
-        <Checkbox
-          checked={player.hasPaid}
-          inputProps={{ 'aria-label': 'controlled' }}
+        <PaidCheckbox 
+          player={player} 
+          showAlert={showAlert} 
+          hideAlert={hideAlert} 
         />
       </TableCell>
       <TableCell align='right' className='cancel-icon-cell'>

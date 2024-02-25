@@ -20,9 +20,17 @@ import {
 function PlayerList ({ players, maxPlayers, highlightedIndex }) {
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [alert, setAlert] = useState({ message: '', severity: '' });
   const [removingPlayerId, setRemovingPlayerId] = useState(null);
   const dispatch = useDispatch()
+
+  const showAlert = (message, severity = 'error') => {
+    setAlert({ message, severity });
+  };
+
+  const hideAlert = () => {
+    setAlert({ message: '', severity: '' });
+  };
 
   const handleOpenDialog = player => {
     setSelectedPlayer(player)
@@ -45,18 +53,18 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
           setRemovingPlayerId(null);
         }, 1000); 
         handleCloseDialog();
-        setErrorMessage('');
+        hideAlert();
       } catch (error) {
         console.error('Failed to cancel sign-up:', error)
         handleCloseDialog()
-        setErrorMessage('Failed to cancel sign-up. Please try again.')
+        showAlert('Failed to cancel sign-up. Please try again.')
       }
     }
   }
 
   return (
     <>
-      {errorMessage && <Alert severity='error'>{errorMessage}</Alert>}
+      {alert.message && <Alert severity={alert.severity}>{alert.message}</Alert>}
       <TableContainer component={Paper}>
         <Table aria-label='simple table'>
           <TableHead>
@@ -64,6 +72,7 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
               <TableCell>#</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align='right'>Paid</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -77,6 +86,8 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
                   highlightedIndex === player.name ? index : null
                 }
                 isRemoving={removingPlayerId === player.playerId}
+                showAlert={showAlert} 
+                hideAlert={hideAlert} 
               />
             ))}
             {Array.from({ length: maxPlayers - players.length }, (_, index) => (
