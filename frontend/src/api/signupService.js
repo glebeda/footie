@@ -8,12 +8,27 @@ export const fetchGameDetails = () => {
     });
 };
 
-export const signUpPlayer = (signUpDetails) => {
-  return axios.post('/signups', signUpDetails)
-    .then(response => response.data)
-    .catch(error => {
-      throw new Error('There was an error signing up the player:', error);
-    });
+export const signUpPlayer = async (signUpDetails) => {
+  try {
+    const response = await axios.post('/signups', signUpDetails);
+    return response.data; 
+  } catch (error) {
+    if (error.response) {
+      const { status, data } = error.response;
+      switch (status) {
+        case 409:
+          throw new Error('Player is already signed up for this game.');
+        case 403:
+          throw new Error("Can't sign up, the game is already full.");
+        case 400:
+          throw new Error('Name parameter is required and must not be empty.');
+        default:
+          throw new Error(data.error || 'Internal server error');
+      }
+    } else {
+      throw new Error('Network error. Please try again.');
+    }
+  }
 };
 
 export const cancelSignUp = (gameId, playerId) => {
