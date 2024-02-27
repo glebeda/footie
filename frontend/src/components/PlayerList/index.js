@@ -5,7 +5,6 @@ import { cancelSignUp } from '../../api/signupService'
 import PlayerRow from '../PlayerRow'
 import './PlayerList.css'
 import CancelDialog from '../CancelDialog'
-import { Alert } from '@mui/material'
 import {
   Table,
   TableBody,
@@ -17,20 +16,11 @@ import {
   Checkbox,
 } from '@mui/material'
 
-function PlayerList ({ players, maxPlayers, highlightedIndex }) {
+function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAlert }) {
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
-  const [alert, setAlert] = useState({ message: '', severity: '' });
   const [removingPlayerId, setRemovingPlayerId] = useState(null);
   const dispatch = useDispatch()
-
-  const showAlert = (message, severity = 'error') => {
-    setAlert({ message, severity });
-  };
-
-  const hideAlert = () => {
-    setAlert({ message: '', severity: '' });
-  };
 
   const handleOpenDialog = player => {
     setSelectedPlayer(player)
@@ -64,7 +54,6 @@ function PlayerList ({ players, maxPlayers, highlightedIndex }) {
 
   return (
     <>
-      {alert.message && <Alert severity={alert.severity}>{alert.message}</Alert>}
       <TableContainer component={Paper}>
         <Table aria-label='simple table'>
           <TableHead>
