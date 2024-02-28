@@ -121,11 +121,7 @@ const findUpcomingGame = async () => {
       item.Status === GameStatus.OPEN || item.Status === GameStatus.FULL
     ).sort((a, b) => new Date(a.Date) - new Date(b.Date));
 
-    if (upcomingGames.length > 0) {
-      return upcomingGames[0];
-    } else {
-      throw new Error('No upcoming games found');
-    }
+    return upcomingGames.length > 0 ? upcomingGames[0] : null;
   } catch (error) {
     console.error("Error finding upcoming game:", error);
     throw error;
