@@ -57,7 +57,9 @@ const signUpService = {
 
   async getUpcomingGameWithSignups () {
     const upcomingGame = await GameService.findUpcomingGame()
-    if (!upcomingGame) throw new Error('No upcoming games found.')
+    if (!upcomingGame) {
+      return { game: null, signUps: [] };
+    }
     const signUps = await this.getSignUpsForGame(upcomingGame.GameId)
 
     // Fetch player details for each sign-up. Consider performance improvement here
