@@ -51,10 +51,12 @@ describe('signupServiceGetUpcoming', () => {
         expect(playerService.getPlayerById).toHaveBeenCalledWith('playerId1');
       });
 
-    it('throws an error if no upcoming games are found', async () => {
+    it('handles the case when no upcoming games are found gracefully', async () => {
       gameService.findUpcomingGame.mockResolvedValue(null);
 
-      await expect(signupService.getUpcomingGameWithSignups()).rejects.toThrow('No upcoming games found.');
+      const result = await signupService.getUpcomingGameWithSignups();
+    
+      expect(result).toEqual({"game": null, "signUps": []});
       expect(gameService.findUpcomingGame).toHaveBeenCalled();
     });
 
