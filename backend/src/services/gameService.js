@@ -19,15 +19,15 @@ const gameService = {
 
   async findUpcomingGame () {
     try {
-      const game = await Game.findUpcomingGame()
-      if (!game) {
-        throw new Error(`No upcoming games found`)
+        const game = await Game.findUpcomingGame();
+        if (!game) {
+          return null;
+        }
+        return game;
+      } catch (error) {
+        console.error(`Error in gameService.findUpcomingGame:`, error);
+        throw new Error(`Unable to retrieve upcoming game`);
       }
-      return game
-    } catch (error) {
-      console.error(`Error in gameService.findUpcomingGame:`, error)
-      throw new Error(`Unable to retrieve upcoming game`)
-    }
   },
 
   async updateGameStatus (gameId, status) {
