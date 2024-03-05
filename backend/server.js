@@ -11,6 +11,7 @@ AWS.config.update({
 
 const express = require('express');
 const cors = require('cors');
+const { scheduleGameStatusUpdate } = require('./src/services/scheduler');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -26,6 +27,7 @@ const signupRoutes = require('./src/api/routes/signups');
 app.use('/games', gamesRoutes);
 app.use('/players', playerRoutes);
 app.use('/signups', signupRoutes);
+scheduleGameStatusUpdate();
 
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
