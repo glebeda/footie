@@ -1,0 +1,22 @@
+  .container {
+    text-align: center;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .title {
+      font-size: 1.5rem; 
+    }
+  }
+  
+  .imageContainer {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    min-height: 60vh; 
+  }
+  
+  .image {
+    max-width: 100%;
+    height: auto;
+  }
+  

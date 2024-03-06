@@ -30,9 +30,13 @@ export const signupSlice = createSlice({
         state.players[playerIndex].hasPaid = paid;
       }
     },
+    setGameNotFound: (state) => {
+      state.gameDetails = null;  
+      state.players = [];        
+    },
   },
 });
 
-export const { setPlayers, setGameDetails, setHasSignedUp, setHasPaid, removePlayer, updatePlayerPaidStatus } = signupSlice.actions;
+export const { setPlayers, setGameDetails, setHasSignedUp, setHasPaid, removePlayer, updatePlayerPaidStatus, setGameNotFound } = signupSlice.actions;
 
 export default signupSlice.reducer;

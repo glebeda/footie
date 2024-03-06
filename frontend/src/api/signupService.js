@@ -4,7 +4,11 @@ export const fetchGameDetails = () => {
   return axios.get('/signups/upcoming')
     .then(response => response.data)
     .catch(error => {
-      throw new Error('There was an error fetching the game details:', error);
+      if (error.response && error.response.status === 404) {
+        throw new Error('No upcoming games found');
+      } else {
+        throw new Error('There was an error fetching the game details:', error);
+      }
     });
 };
 
