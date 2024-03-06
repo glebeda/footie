@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPlayers, setGameDetails } from '../redux/slices/signupSlice';
+import { setPlayers, setGameDetails, setGameNotFound } from '../redux/slices/signupSlice';
 import { fetchGameDetails } from '../api/signupService';
 
 export const useGameDetails = () => {
@@ -18,7 +18,11 @@ export const useGameDetails = () => {
         hasPaid: signUp.Paid,
       }))));
     } catch (error) {
-      console.error('There was an error fetching the game details:', error);
+      if (error.message === 'No upcoming games found') {
+        dispatch(setGameNotFound());
+      } else {
+        console.error('There was an error fetching the game details:', error);
+      }
     }
   }, [dispatch]);
 

@@ -4,6 +4,7 @@ import { TextField, Container, Typography } from '@mui/material'
 import PrimaryButton from '../../components/PrimaryButton'
 import PlayerList from '../../components/PlayerList'
 import AlertComponent from '../../components/AlertComponent'
+import EmptyState from '../../components/EmptyState'; 
 import { useGameDetails } from '../../hooks/useGameDetails'
 import { signUpPlayer } from '../../api/signupService'
 import { scrollToTop } from '../../utils/scrollUtils'
@@ -49,6 +50,10 @@ const SignUpPage = () => {
       console.error(error.message);
       showAlert(error.message);
     }
+  }
+
+  if (!gameDetails) {
+    return <EmptyState />;
   }
 
   return (
