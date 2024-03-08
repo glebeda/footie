@@ -1,7 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-
       {
         "type": "node",
         "request": "launch",
@@ -25,7 +24,7 @@
       {
         "type": "node",
         "request": "launch",
-        "name": "Jest Tests",
+        "name": "BE Tests",
         "program": "${workspaceFolder}/backend/node_modules/.bin/jest",
         "args": ["--runInBand"],
         "cwd": "${workspaceFolder}/backend",
@@ -34,6 +33,18 @@
         "env": {
             "NODE_ENV": "test"
         }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "FE Tests",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test"],
+      "cwd": "${workspaceFolder}/frontend",
+      "console": "integratedTerminal",
+      "env": {
+        "CI": "true"
+      }
     }
   ]
 }
