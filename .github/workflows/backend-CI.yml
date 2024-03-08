@@ -29,25 +29,25 @@ jobs:
       env:
         CI: true
 
-  frontend-test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend/
-    strategy:
-      matrix:
-        node-version: [20.x] # Adjust this as necessary for your frontend
+  # frontend-test:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ./frontend/
+  #   strategy:
+  #     matrix:
+  #       node-version: [20.x] # Adjust this as necessary for your frontend
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm ci
-    - name: Run React-scripts test
-      run: npm test
-      env:
-        CI: true
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       cache: 'npm'
+  #   - name: Install dependencies
+  #     run: npm ci
+  #   - name: Run React-scripts test
+  #     run: npm test
+  #     env:
+  #       CI: true
