@@ -16,7 +16,7 @@ const AdminPage = () => {
       MaxPlayers: maxPlayers,
       Status: 'OPEN', // Hardcoded as it should be always OPEN on creation
     };
-
+//test change
     try {
       await createGame(gameData);
       alert('Game scheduled successfully');
