@@ -1,34 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PaidCheckbox from '../PaidCheckbox';
 import CancelIcon from '@mui/icons-material/Cancel'
 import './PlayerRow.css'
-import { useSwipeable } from 'react-swipeable'
 import { TableCell, TableRow, IconButton } from '@mui/material'
 
 const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemoving, showAlert, hideAlert }) => {
-    const [isSwiping, setIsSwiping] = useState(false);
 
-  const swipeHandlers = useSwipeable({
-    onSwiped: eventData => {
-      console.log('Swiped!', eventData)
-      setIsSwiping(false)
-      handleOpenDialog(player)
-    },
-    onSwiping: eventData => {
-      if (Math.abs(eventData.deltaX) > 10) {
-        setIsSwiping(true)
-      }
-    },
-  })
-  
   const rowClasses = [
-    isSwiping ? 'row-swiping' : '',
     index === highlightedIndex ? 'highlighted-row' : '',
     isRemoving ? 'removing' : '',
   ].filter(Boolean).join(' ');
 
   return (
-    <TableRow {...swipeHandlers} className={rowClasses}>
+    <TableRow className={rowClasses}>
       <TableCell component='th' scope='row'>
         {index + 1}
       </TableCell>
