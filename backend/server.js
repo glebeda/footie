@@ -16,7 +16,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: 'http://localhost:3001' // React app
+  // React app
+  origin: process.env.NODE_ENV === 'production' ? 'http://footie-frontend.s3-website.eu-west-2.amazonaws.com' : 'http://localhost:3001',
 }));
 app.use(express.json());
 
@@ -34,5 +35,7 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  const environment = process.env.NODE_ENV || 'dev';
+  const host = environment === 'production' ? 'production URL' : `http://localhost:${port}`;
+  console.log(`Server running in ${environment} mode on ${host}`);
 });
