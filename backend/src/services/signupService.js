@@ -25,7 +25,7 @@ const signUpService = {
       await GameService.updateGameStatus(gameId, GameStatus.FULL)
     }
 
-    return { success: true, message: 'Sign-up successful' }
+    return { Success: true, PlayerId: playerId, Message: 'Sign-up successful' }
   },
 
   async cancelSignUp (gameId, playerId) {

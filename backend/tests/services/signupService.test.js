@@ -32,7 +32,7 @@ describe('signupService', () => {
     it('successfully adds a new sign-up', async () => {
       const result = await addSignUp('Tuesday Game', 'John Psina')
 
-      expect(result).toEqual({ success: true, message: 'Sign-up successful' })
+      expect(result).toEqual({ Success: true, PlayerId: "player123", Message: 'Sign-up successful' })
       expect(gameModel.getGameById).toHaveBeenCalledWith('Tuesday Game')
       expect(playerService.ensureUniquePlayer).toHaveBeenCalledWith(
         'John Psina'

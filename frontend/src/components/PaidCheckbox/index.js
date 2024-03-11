@@ -10,8 +10,8 @@ const PaidCheckbox = ({ player, showAlert, hideAlert }) => {
   const handlePaymentStatusChange = async (event) => {
     try {
       const paidStatus = event.target.checked;
-      await updatePaymentStatus(player.gameId, player.PlayerId, paidStatus);
-      dispatch(updatePlayerPaidStatus({ playerId: player.PlayerId, paid: paidStatus }));
+      await updatePaymentStatus(player.gameId, player.playerId, paidStatus);
+      dispatch(updatePlayerPaidStatus({ playerId: player.playerId, paid: paidStatus }));
       console.log('Payment status updated successfully');
       hideAlert();
     } catch (error) {

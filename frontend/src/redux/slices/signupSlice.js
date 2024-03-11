@@ -5,6 +5,7 @@ export const signupSlice = createSlice({
   initialState: {
     players: [],
     gameDetails: null, 
+    isLoadingGameDetails: false, 
     hasSignedUp: false,
   },
   reducers: {
@@ -14,6 +15,9 @@ export const signupSlice = createSlice({
     setGameDetails: (state, action) => {
       state.gameDetails = action.payload;
     },
+    setLoadingState: (state, action) => {
+      state.isLoadingGameDetails = action.payload;
+    },
     setHasSignedUp: (state, action) => {
       state.hasSignedUp = action.payload;
     },
@@ -21,11 +25,14 @@ export const signupSlice = createSlice({
       state.hasPaid = action.payload;
     },
     removePlayer: (state, action) => {
-      state.players = state.players.filter(player => player.PlayerId !== action.payload.playerId);
+      state.players = state.players.filter(player => player.playerId !== action.payload.playerId);
+    },
+    addPlayer: (state, action) => {
+      state.players.push(action.payload);
     },
     updatePlayerPaidStatus: (state, action) => {
       const { playerId, paid } = action.payload;
-      const playerIndex = state.players.findIndex(player => player.PlayerId === playerId);
+      const playerIndex = state.players.findIndex(player => player.playerId === playerId);
       if (playerIndex !== -1) {
         state.players[playerIndex].hasPaid = paid;
       }
@@ -37,6 +44,7 @@ export const signupSlice = createSlice({
   },
 });
 
-export const { setPlayers, setGameDetails, setHasSignedUp, setHasPaid, removePlayer, updatePlayerPaidStatus, setGameNotFound } = signupSlice.actions;
+export const { setPlayers, setGameDetails, setHasSignedUp, setHasPaid, 
+  removePlayer, updatePlayerPaidStatus, setGameNotFound, setLoadingState, addPlayer } = signupSlice.actions;
 
 export default signupSlice.reducer;

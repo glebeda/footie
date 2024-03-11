@@ -1,12 +1,13 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { setPlayers, setGameDetails, setGameNotFound } from '../redux/slices/signupSlice';
+import { setPlayers, setGameDetails, setGameNotFound, setLoadingState } from '../redux/slices/signupSlice';
 import { fetchGameDetails } from '../api/signupService';
 
 export const useGameDetails = () => {
   const dispatch = useDispatch();
 
   const fetchAndSetGameDetails = useCallback(async () => {
+    dispatch(setLoadingState(true)); 
     try {
       const { game, signUps } = await fetchGameDetails();
       dispatch(setGameDetails(game));
@@ -23,6 +24,8 @@ export const useGameDetails = () => {
       } else {
         console.error('There was an error fetching the game details:', error);
       }
+    } finally {
+      dispatch(setLoadingState(false));
     }
   }, [dispatch]);
 
