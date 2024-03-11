@@ -6,7 +6,7 @@ jest.mock('../PaidCheckbox', () => () => <div>PaidCheckbox Mock</div>);
 jest.mock('@mui/icons-material/Cancel', () => () => <span>CancelIcon Mock</span>);
 
 describe('PlayerRow', () => {
-  const playerMock = { name: 'Player 1', hasPaid: false, PlayerId: '1', gameId: 'game1' };
+  const playerMock = { name: 'Player 1', paid: false, PlayerId: '1', gameId: 'game1' };
   const handleOpenDialogMock = jest.fn();
   const showAlertMock = jest.fn();
   const hideAlertMock = jest.fn();

@@ -13,10 +13,10 @@ export const useGameDetails = () => {
       dispatch(setGameDetails(game));
       dispatch(setPlayers(signUps.map(signUp => ({
         ...signUp,
-        name: signUp.PlayerName,
-        playerId: signUp.PlayerId,
-        gameId: game.GameId,
-        hasPaid: signUp.Paid,
+        name: signUp.playerName,
+        playerId: signUp.playerId,
+        gameId: game.gameId,
+        paid: signUp.paid,
       }))));
     } catch (error) {
       if (error.message === 'No upcoming games found') {

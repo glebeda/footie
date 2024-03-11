@@ -22,7 +22,7 @@ const PaidCheckbox = ({ player, showAlert, hideAlert }) => {
 
   return (
     <Checkbox
-      checked={player.hasPaid}
+      checked={player.paid}
       onChange={handlePaymentStatusChange}
       inputProps={{ 'aria-label': 'controlled' }}
     />

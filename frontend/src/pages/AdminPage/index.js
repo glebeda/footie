@@ -11,10 +11,10 @@ const AdminPage = () => {
 
   const handleCreateGame = async () => {
     const gameData = {
-      Date: gameDate,
-      Location: location,
-      MaxPlayers: maxPlayers,
-      Status: 'OPEN', // Hardcoded as it should be always OPEN on creation
+      date: gameDate,
+      location: location,
+      maxPlayers: maxPlayers,
+      status: 'OPEN', // Hardcoded as it should be always OPEN on creation
     };
 
     try {

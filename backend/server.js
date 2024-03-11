@@ -10,6 +10,7 @@ AWS.config.update({
 });
 
 const express = require('express');
+const camelCaseMiddleware = require('./src/middleware/camelCaseMiddleware');
 const cors = require('cors');
 const { scheduleGameStatusUpdate } = require('./src/services/scheduler');
 const app = express();
@@ -20,6 +21,7 @@ app.use(cors({
   origin: process.env.NODE_ENV === 'production' ? 'http://footie-frontend.s3-website.eu-west-2.amazonaws.com' : 'http://localhost:3001',
 }));
 app.use(express.json());
+app.use(camelCaseMiddleware);
 
 const gamesRoutes = require('./src/api/routes/games');
 const playerRoutes = require('./src/api/routes/players');

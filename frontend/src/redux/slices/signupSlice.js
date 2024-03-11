@@ -22,7 +22,7 @@ export const signupSlice = createSlice({
       state.hasSignedUp = action.payload;
     },
     setHasPaid: (state, action) => {
-      state.hasPaid = action.payload;
+      state.paid = action.payload;
     },
     removePlayer: (state, action) => {
       state.players = state.players.filter(player => player.playerId !== action.payload.playerId);
@@ -34,7 +34,7 @@ export const signupSlice = createSlice({
       const { playerId, paid } = action.payload;
       const playerIndex = state.players.findIndex(player => player.playerId === playerId);
       if (playerIndex !== -1) {
-        state.players[playerIndex].hasPaid = paid;
+        state.players[playerIndex].paid = paid;
       }
     },
     setGameNotFound: (state) => {

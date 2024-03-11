@@ -41,16 +41,16 @@ const SignUpPage = () => {
     event.preventDefault()
     try {
       const signupDetails = await signUpPlayer({
-        gameId: gameDetails.GameId,
+        gameId: gameDetails.gameId,
         playerName
       })
       setPlayerName('')
       setHighlightedIndex(playerName)
       const newPlayer = {
         name: playerName,
-        playerId: signupDetails.PlayerId, 
-        gameId: gameDetails.GameId,
-        hasPaid: false, 
+        playerId: signupDetails.playerId, 
+        gameId: gameDetails.gameId,
+        paid: false, 
       };
       dispatch(addPlayer(newPlayer));
       hideAlert();
@@ -99,7 +99,7 @@ const SignUpPage = () => {
       </form>
       <PlayerList
         players={players}
-        maxPlayers={gameDetails?.MaxPlayers}
+        maxPlayers={gameDetails?.maxPlayers}
         highlightedIndex={highlightedIndex}
         showAlert={showAlert}
         hideAlert={hideAlert}
