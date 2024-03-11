@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { TextField, Container, Typography } from '@mui/material'
 import PrimaryButton from '../../components/PrimaryButton'
 import PlayerList from '../../components/PlayerList'
 import AlertComponent from '../../components/AlertComponent'
 import EmptyState from '../../components/EmptyState'; 
+import LoadingState from '../../components/LoadingState'; 
 import { useGameDetails } from '../../hooks/useGameDetails'
 import { signUpPlayer } from '../../api/signupService'
 import { scrollToTop } from '../../utils/scrollUtils'
+import { addPlayer } from '../../redux/slices/signupSlice';
 
 const SignUpPage = () => {
-  const { players, gameDetails } = useSelector(state => state.signup)
+  const dispatch = useDispatch();
+  const { players, gameDetails, isLoadingGameDetails } = useSelector(state => state.signup);
   const [playerName, setPlayerName] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(null)
   const [alertInfo, setAlertInfo] = useState({
@@ -18,10 +22,8 @@ const SignUpPage = () => {
     message: '',
     severity: 'error',
   });
-  const { fetchAndSetGameDetails } = useGameDetails()
-
   useGameDetails()
-
+  
   const showAlert = (message, severity = 'error') => {
     setAlertInfo({ open: true, message, severity });
     scrollToTop();
@@ -38,18 +40,28 @@ const SignUpPage = () => {
   const handleSignUp = async event => {
     event.preventDefault()
     try {
-      await signUpPlayer({
+      const signupDetails = await signUpPlayer({
         gameId: gameDetails.GameId,
         playerName
       })
       setPlayerName('')
       setHighlightedIndex(playerName)
-      await fetchAndSetGameDetails()
+      const newPlayer = {
+        name: playerName,
+        playerId: signupDetails.PlayerId, 
+        gameId: gameDetails.GameId,
+        hasPaid: false, 
+      };
+      dispatch(addPlayer(newPlayer));
       hideAlert();
     } catch (error) {
       console.error(error.message);
       showAlert(error.message);
     }
+  }
+
+  if (isLoadingGameDetails) {
+    return <LoadingState />; 
   }
 
   if (!gameDetails) {
