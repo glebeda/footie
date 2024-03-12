@@ -75,7 +75,7 @@ const SignUpPage = () => {
       </Typography>
       {gameDetails && (
         <Typography variant='h6' gutterBottom>
-          {`Game Date: ${gameDetails.Date}, Location: ${gameDetails.Location}`}
+          {`Game Date: ${gameDetails.date}, Location: ${gameDetails.location}`}
         </Typography>
       )}
       <AlertComponent
