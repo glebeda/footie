@@ -11,3 +11,7 @@
     animation: fadeInHighlight 2s forwards;
   }
   
+  .player-list-container {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }

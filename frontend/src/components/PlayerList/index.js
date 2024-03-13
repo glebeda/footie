@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { removePlayer } from '../../redux/slices/signupSlice'
 import { cancelSignUp } from '../../api/signupService'
@@ -16,11 +16,18 @@ import {
   Checkbox,
 } from '@mui/material'
 
-function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAlert }) {
+function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAlert, signupOccurred }) {
+  const lastRowRef = useRef(null);
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
   const [removingPlayerId, setRemovingPlayerId] = useState(null);
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (signupOccurred && lastRowRef.current) {
+      lastRowRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [players.length, signupOccurred]);
 
   const handleOpenDialog = player => {
     setSelectedPlayer(player)
@@ -54,7 +61,7 @@ function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAle
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer className='player-list-container' component={Paper}>
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow>
@@ -69,10 +76,11 @@ function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAle
               <PlayerRow
                 key={player.name}
                 player={player}
+                ref={index === players.length - 1 ? lastRowRef : null} 
                 index={index}
                 handleOpenDialog={handleOpenDialog}
                 highlightedIndex={
-                  highlightedIndex === player.name ? index : null
+                  highlightedIndex === player.playerId ? index : null
                 }
                 isRemoving={removingPlayerId === player.playerId}
                 showAlert={showAlert} 

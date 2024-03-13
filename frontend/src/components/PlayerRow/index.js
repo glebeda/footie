@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { forwardRef } from 'react';
 import PaidCheckbox from '../PaidCheckbox';
 import CancelIcon from '@mui/icons-material/Cancel'
 import './PlayerRow.css'
 import { TableCell, TableRow, IconButton } from '@mui/material'
 
-const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemoving, showAlert, hideAlert }) => {
+const PlayerRow = forwardRef(({ player, index, handleOpenDialog, highlightedIndex, isRemoving, showAlert, hideAlert }, ref) => {
 
   const rowClasses = [
     index === highlightedIndex ? 'highlighted-row' : '',
@@ -12,7 +12,7 @@ const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemovi
   ].filter(Boolean).join(' ');
 
   return (
-    <TableRow className={rowClasses}>
+    <TableRow ref={ref} className={rowClasses}>
       <TableCell component='th' scope='row'>
         {index + 1}
       </TableCell>
@@ -30,7 +30,7 @@ const PlayerRow = ({ player, index, handleOpenDialog, highlightedIndex, isRemovi
         </IconButton>
       </TableCell>
     </TableRow>
-  )
-}
+  );
+});
 
 export default PlayerRow
