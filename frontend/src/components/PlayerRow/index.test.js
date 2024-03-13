@@ -103,4 +103,27 @@ describe('PlayerRow', () => {
 
     expect(screen.getByText(playerMock.name).closest('tr')).not.toHaveClass('removing');
   });
+
+  it('assigns ref to the TableRow component', () => {
+    const ref = React.createRef();
+    render(
+      <table>
+        <tbody>
+          <PlayerRow
+            ref={ref}
+            player={playerMock}
+            index={0}
+            handleOpenDialog={handleOpenDialogMock}
+            highlightedIndex={0}
+            isRemoving={false}
+            showAlert={showAlertMock}
+            hideAlert={hideAlertMock}
+          />
+        </tbody>
+      </table>
+    );
+  
+    expect(ref.current.tagName).toBe('TR');
+  });
+
 });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { TextField, Container, Typography } from '@mui/material'
@@ -16,6 +16,7 @@ const SignUpPage = () => {
   const dispatch = useDispatch();
   const { players, gameDetails, isLoadingGameDetails } = useSelector(state => state.signup);
   const [playerName, setPlayerName] = useState('')
+  const [signupOccurred, setSignupOccurred] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(null)
   const [alertInfo, setAlertInfo] = useState({
     open: false,
@@ -45,7 +46,8 @@ const SignUpPage = () => {
         playerName
       })
       setPlayerName('')
-      setHighlightedIndex(playerName)
+      setHighlightedIndex(signupDetails.playerId)
+      setSignupOccurred(true);
       const newPlayer = {
         name: playerName,
         playerId: signupDetails.playerId, 
@@ -59,6 +61,12 @@ const SignUpPage = () => {
       showAlert(error.message);
     }
   }
+
+  useEffect(() => {
+    if (signupOccurred) {
+      setSignupOccurred(false);
+    }
+  }, [signupOccurred]);
 
   if (isLoadingGameDetails) {
     return <LoadingState />; 
@@ -103,6 +111,7 @@ const SignUpPage = () => {
         highlightedIndex={highlightedIndex}
         showAlert={showAlert}
         hideAlert={hideAlert}
+        signupOccurred={signupOccurred}
       />
     </Container>
   )
