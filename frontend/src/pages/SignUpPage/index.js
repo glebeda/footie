@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { TextField, Container, Typography } from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrimaryButton from '../../components/PrimaryButton'
 import PlayerList from '../../components/PlayerList'
 import AlertComponent from '../../components/AlertComponent'
@@ -11,6 +13,7 @@ import { useGameDetails } from '../../hooks/useGameDetails'
 import { signUpPlayer } from '../../api/signupService'
 import { scrollToTop } from '../../utils/scrollUtils'
 import { addPlayer } from '../../redux/slices/signupSlice';
+import './SignUpPage.css'
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
@@ -78,14 +81,19 @@ const SignUpPage = () => {
 
   return (
     <Container maxWidth='sm'>
-      <Typography variant='h4' component='h1' gutterBottom>
-        Sign Up for the Upcoming Game
-      </Typography>
-      {gameDetails && (
-        <Typography variant='h6' gutterBottom>
-          {`Game Date: ${gameDetails.date}, Location: ${gameDetails.location}`}
-        </Typography>
-      )}
+    <Typography variant='h4' component='h1' gutterBottom className="game-title">
+      Join the Next Game
+    </Typography>
+    <div className="game-info">
+      <span>
+        <AccessTimeIcon className="game-info-icon" />
+        <span className="game-info-text">{`Date: ${gameDetails.date}`}</span>
+      </span>
+      <span>
+        <LocationOnIcon className="game-info-icon" />
+        <span className="game-info-text">{`Location: ${gameDetails.location}`}</span>
+      </span>
+    </div>
       <AlertComponent
         open={alertInfo.open}
         message={alertInfo.message}
