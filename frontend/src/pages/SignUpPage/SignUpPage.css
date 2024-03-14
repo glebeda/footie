@@ -27,10 +27,13 @@
   }
   
   @media (max-width: 600px) {
-    /* For smaller screens */
     .game-info {
       flex-direction: column;
       align-items: flex-start;
+    }
+
+    .game-info > span:first-child {
+        margin-bottom: 1rem;
     }
   }
   
