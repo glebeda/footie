@@ -13,9 +13,10 @@
     display: flex;
     justify-content: space-between;
     margin-top: 0.5em; 
-    font-size: 0.9em; 
+    font-size: 0.99rem;
     color: #555; 
     align-items: center;
+    padding: 5px;
   }
   
   .game-info-icon {
