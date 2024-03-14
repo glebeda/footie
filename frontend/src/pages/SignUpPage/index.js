@@ -13,6 +13,7 @@ import { useGameDetails } from '../../hooks/useGameDetails'
 import { signUpPlayer } from '../../api/signupService'
 import { scrollToTop } from '../../utils/scrollUtils'
 import { addPlayer } from '../../redux/slices/signupSlice';
+import { formatDate } from '../../utils/dateUtils';
 import './SignUpPage.css'
 
 const SignUpPage = () => {
@@ -87,7 +88,7 @@ const SignUpPage = () => {
     <div className="game-info">
       <span>
         <AccessTimeIcon className="game-info-icon" />
-        <span className="game-info-text">{`Date: ${gameDetails.date}`}</span>
+        <span className="game-info-text">Date: {formatDate(gameDetails.date)}</span>
       </span>
       <span>
         <LocationOnIcon className="game-info-icon" />
