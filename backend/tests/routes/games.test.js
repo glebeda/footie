@@ -4,6 +4,13 @@
 // const GameService = require('../../src/services/gameService');
 // const GameStatus = require('../../src/constants/gameStatus');
 
+ describe('stub test', () => {
+  
+   it('stub test', async () => {
+        return true;
+     });
+});
+
 // jest.mock('../../src/services/gameService');
 
 // describe('PUT /games/:id/status', () => {
