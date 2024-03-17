@@ -4,7 +4,6 @@ exports[`PrimaryButton renders correctly 1`] = `
 <DocumentFragment>
   <button
     class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-sghohy-MuiButtonBase-root-MuiButton-root"
-    style="margin-bottom: 20px;"
     tabindex="0"
     type="submit"
   >

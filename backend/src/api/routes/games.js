@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const gameModel = require('../../models/gameModel')
 const GameService = require('../../services/gameService')
+const GameStatus = require('../../constants/gameStatus')
 
 // POST /games - Create a new game
 router.post('/', async (req, res) => {
@@ -18,6 +19,22 @@ router.post('/', async (req, res) => {
   }
 })
 
+// GET /games/upcoming - Get the upcoming game
+router.get('/upcoming', async (req, res) => {
+  try {
+    const upcomingGame = await GameService.findUpcomingGame();
+    if (upcomingGame) {
+      res.json(upcomingGame);
+    } else {
+      res.status(404).json({ error: 'No upcoming game found' });
+    }
+  } catch (error) {
+    console.error(`Error fetching the upcoming game:`, error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
+
 // GET /games/:id - Get a game by ID
 router.get('/:id', async (req, res) => {
   try {
@@ -32,5 +49,26 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: error.toString() })
   }
 })
+
+// PUT /games/:id/status - Update the status of a game
+router.put('/:id/status', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!Object.values(GameStatus).includes(status)) {
+      return res.status(400).json({ error: 'Invalid game status' });
+    }
+
+    const updatedGame = await GameService.updateGameStatus(id, status);
+    if (updatedGame) {
+      res.json({ message: 'Game status updated successfully', updatedGame });
+    } else {
+      res.status(404).json({ error: 'Game not found' });
+    }
+  } catch (error) {
+    console.error(`Error updating game status:`, error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
 
 module.exports = router

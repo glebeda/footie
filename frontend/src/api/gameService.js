@@ -17,3 +17,41 @@ export const createGame = (gameData) => {
       }
     });
 };
+
+export const updateGameStatus = (gameId, status) => {
+  return axios.put(`/games/${gameId}/status`, { status })
+    .then(response => response.data)
+    .catch(error => {
+      if (error.response) {
+        const { status, data } = error.response;
+        switch (status) {
+          case 400:
+            throw new Error('Invalid game status.');
+          case 404:
+            throw new Error('Game not found.');
+          default:
+            throw new Error(data.error || 'Error updating game status.');
+        }
+      } else {
+        throw new Error('Network error. Please try again.');
+      }
+    });
+};
+
+export const getUpcomingGame = () => {
+  return axios.get('/games/upcoming')
+    .then(response => response.data)
+    .catch(error => {
+      if (error.response) {
+        const { status, data } = error.response;
+        switch (status) {
+          case 404:
+            return null;
+          default:
+            throw new Error(data.error || 'Error fetching the upcoming game.');
+        }
+      } else {
+        throw new Error('Network error. Please try again.');
+      }
+    });
+};
