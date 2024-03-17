@@ -8,3 +8,20 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: none; 
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 380px) {
+  .button-container {
+    flex-direction: column; 
+  }
+  .button-container button {
+    margin-top: 10px; 
+    padding: 6px 12px; 
+    width: 100%; 
+  }
+}

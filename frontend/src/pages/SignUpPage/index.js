@@ -110,7 +110,7 @@ const SignUpPage = () => {
           onChange={handleNameChange}
           margin='normal'
         />
-        <PrimaryButton disabled={!playerName.trim()} onClick={handleSignUp}>
+        <PrimaryButton className="main-button" disabled={!playerName.trim()} onClick={handleSignUp}>
           Sign Up
         </PrimaryButton>
       </form>
