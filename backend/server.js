@@ -18,7 +18,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors({
   // React app
-  origin: process.env.NODE_ENV === 'production' ? 'http://footie-frontend.s3-website.eu-west-2.amazonaws.com' : 'http://localhost:3001',
+  origin: process.env.NODE_ENV === 'production' ? 'https://www.playfootie.net' : 'http://localhost:3001',
 }));
 app.use(express.json());
 app.use(camelCaseMiddleware);
