@@ -2,7 +2,7 @@
 
 Footie is a web application designed to make organizing football games with friends easier and more efficient. It allows users to join games, create new matches, and manage football events seamlessly.
 
-![Footie App Screenshot](path-to-screenshot.png) <!-- Replace `path-to-screenshot.png` with the path to a screenshot of your app -->
+<img width="585" alt="image" src="https://github.com/glebeda/footie/assets/32038177/079ac0c8-c31c-4c66-b0af-6a0ac7fa044a">
 
 ## Features
 
