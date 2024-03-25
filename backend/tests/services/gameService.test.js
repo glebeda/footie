@@ -18,6 +18,7 @@ describe('gameService', () => {
         GameId: 'testGameId',
         Status: 'OPEN',
         MaxPlayers: 10,
+        MaxSubstitutes: 2,
         Date: '2024-04-01',
         Location: 'Local Sports Center'
       }
@@ -57,6 +58,7 @@ describe('gameService', () => {
         GameId: 'upcomingGameId',
         Status: 'OPEN',
         MaxPlayers: 10,
+        MaxSubstitutes: 2,
         Date: '2024-05-01',
         Location: 'Local Sports Center'
       }
@@ -79,6 +81,7 @@ describe('gameService', () => {
         Date: '2024-05-08',
         Location: 'Local Sports Center',
         MaxPlayers: 10,
+        MaxSubstitutes: 2,
         Status: 'OPEN'
       }
       const mockNewGame = { ...gameData, GameId: 'newGameId' }

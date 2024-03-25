@@ -2,24 +2,27 @@ const {
   addSignUp,
   cancelSignUp,
   updateSignUpPaymentStatus
-} = require('../../src/services/signupService')
-const signupModel = require('../../src/models/signupModel')
-const gameModel = require('../../src/models/gameModel')
-const playerService = require('../../src/services/playerService')
-jest.mock('../../src/models/signupModel', () => ({
+} = require('../../../src/services/signupService')
+const signupModel = require('../../../src/models/signupModel')
+const gameModel = require('../../../src/models/gameModel')
+const playerService = require('../../../src/services/playerService')
+const GameStatus = require('../../../src/constants/gameStatus')
+const PlayerRole = require('../../../src/constants/playerRole')
+jest.mock('../../../src/models/signupModel', () => ({
   addSignUp: jest.fn().mockResolvedValue(true),
   checkSignUpExists: jest.fn().mockResolvedValue(false),
   getSignUpsForGame: jest.fn().mockResolvedValue([]),
   deleteSignUp: jest.fn().mockResolvedValue({}),
-  updatePaymentStatus: jest.fn().mockResolvedValue({ Paid: false })
+  updatePaymentStatus: jest.fn().mockResolvedValue({ Paid: false }),
+  updateSignUpRole: jest.fn().mockResolvedValue({}),
 }))
 
-jest.mock('../../src/models/gameModel', () => ({
+jest.mock('../../../src/models/gameModel', () => ({
   getGameById: jest.fn().mockResolvedValue({ Status: 'OPEN', MaxPlayers: 10 }),
   updateGameStatus: jest.fn().mockResolvedValue({})
 }))
 
-jest.mock('../../src/services/playerService', () => ({
+jest.mock('../../../src/services/playerService', () => ({
   ensureUniquePlayer: jest.fn().mockResolvedValue({ PlayerId: 'player123' })
 }))
 
@@ -32,7 +35,7 @@ describe('signupService', () => {
     it('successfully adds a new sign-up', async () => {
       const result = await addSignUp('Tuesday Game', 'John Psina')
 
-      expect(result).toEqual({ Success: true, PlayerId: "player123", Message: 'Sign-up successful' })
+      expect(result).toEqual({ Success: true, PlayerId: "player123", Role: PlayerRole.MAIN, Message: 'Sign-up successful' })
       expect(gameModel.getGameById).toHaveBeenCalledWith('Tuesday Game')
       expect(playerService.ensureUniquePlayer).toHaveBeenCalledWith(
         'John Psina'
@@ -43,14 +46,16 @@ describe('signupService', () => {
       )
       expect(signupModel.addSignUp).toHaveBeenCalledWith(
         'Tuesday Game',
-        'player123'
+        'player123',
+        PlayerRole.MAIN
       )
     })
 
     it('throws an error when the game is full', async () => {
       gameModel.getGameById.mockResolvedValue({
-        Status: 'FULL',
-        MaxPlayers: 10
+        Status: GameStatus.FULL,
+        MaxPlayers: 10,
+        MaxSubstitutes: 2
       })
 
       await expect(addSignUp('Tuesday Game', 'John Psina')).rejects.toThrow(
@@ -65,7 +70,7 @@ describe('signupService', () => {
 
     it('throws an error for a duplicate sign-up attempt', async () => {
       gameModel.getGameById.mockResolvedValue({
-        Status: 'OPEN',
+        Status: GameStatus.OPEN,
         MaxPlayers: 10
       })
       playerService.ensureUniquePlayer.mockResolvedValue({
@@ -119,11 +124,12 @@ describe('signupService', () => {
       expect(signupModel.deleteSignUp).not.toHaveBeenCalled()
     })
 
-    it('updates the game status to OPEN after cancellation if below max players', async () => {
+    it('updates the game status to OPEN after cancellation if below max players + max substitues', async () => {
       signupModel.checkSignUpExists.mockResolvedValue(true)
       gameModel.getGameById.mockResolvedValue({
-        Status: 'FULL',
-        MaxPlayers: 10
+        Status: GameStatus.FULL,
+        MaxPlayers: 10,
+        MaxSubstitutes: 2
       })
       signupModel.getSignUpsForGame.mockResolvedValue(
         Array(9).fill({ PlayerId: 'player' })
@@ -143,7 +149,7 @@ describe('signupService', () => {
       expect(signupModel.getSignUpsForGame).toHaveBeenCalledWith('Tuesday Game')
       expect(gameModel.updateGameStatus).toHaveBeenCalledWith(
         'Tuesday Game',
-        'OPEN'
+        GameStatus.OPEN
       )
     })
   })
