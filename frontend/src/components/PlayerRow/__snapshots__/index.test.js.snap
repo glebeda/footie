@@ -2,7 +2,7 @@
 
 exports[`PlayerRow renders correctly 1`] = `
 <DocumentFragment>
-  1Player 1
+  0Player 1
   <div>
     PaidCheckbox Mock
   </div>

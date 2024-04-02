@@ -48,13 +48,13 @@ describe('PlayerRow', () => {
     expect(handleOpenDialogMock).toHaveBeenCalledWith(playerMock);
   });
 
-  it('applies highlighted-row class when index equals highlightedIndex', () => {
+  it('applies highlighted-row class when isHighlighted', () => {
     render(
       <PlayerRow
         player={playerMock}
         index={0}
         handleOpenDialog={handleOpenDialogMock}
-        highlightedIndex={0}
+        isHighlighting={true}
         isRemoving={false}
       />
     );

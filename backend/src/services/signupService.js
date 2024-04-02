@@ -2,43 +2,61 @@ const PlayerService = require('./playerService')
 const signupModel = require('../models/signupModel')
 const GameService = require('../services/gameService')
 const GameStatus = require('../constants/gameStatus')
+const PlayerRole = require('../constants/playerRole')
 
 const signUpService = {
   async addSignUp (gameId, playerName) {
-    const gameInfo = await GameService.getGameById(gameId)
+    const gameInfo = await GameService.getGameById(gameId);
     if (gameInfo.Status === GameStatus.FULL) {
       throw new Error('Cannot sign up, the game is already full')
     }
 
-    const player = await PlayerService.ensureUniquePlayer(playerName)
-    const playerId = player.PlayerId
+    const player = await PlayerService.ensureUniquePlayer(playerName);
+    const playerId = player.PlayerId;
 
-    const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId)
+    const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId);
     if (existingSignUp) {
-      throw new Error('Player is already signed up for this game')
+      throw new Error('Player is already signed up for this game');
     }
 
-    await signupModel.addSignUp(gameId, playerId)
+    const signUps = await signupModel.getSignUpsForGame(gameId);
 
-    const signUps = await signupModel.getSignUpsForGame(gameId)
+    let role = PlayerRole.MAIN;
     if (signUps.length >= gameInfo.MaxPlayers) {
-      await GameService.updateGameStatus(gameId, GameStatus.FULL)
+      role = PlayerRole.SUBSTITUTE;
     }
 
-    return { Success: true, PlayerId: playerId, Message: 'Sign-up successful' }
+    await signupModel.addSignUp(gameId, playerId, role);
+
+    if (signUps.length + 1 === gameInfo.MaxPlayers + gameInfo.MaxSubstitutes) {
+      await GameService.updateGameStatus(gameId, GameStatus.FULL);
+    }
+
+    return { Success: true, PlayerId: playerId, Role: role, Message: 'Sign-up successful' }
   },
 
   async cancelSignUp (gameId, playerId) {
-    const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId)
+    const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId);
     if (!existingSignUp) {
-      throw new Error('Sign-up does not exist')
+      throw new Error('Sign-up does not exist');
     }
 
-    await signupModel.deleteSignUp(gameId, playerId)
+    await signupModel.deleteSignUp(gameId, playerId);
 
-    const signUps = await signupModel.getSignUpsForGame(gameId)
-    const gameInfo = await GameService.getGameById(gameId)
-    if (gameInfo.Status === 'FULL' && signUps.length < gameInfo.MaxPlayers) {
+    let signUps = await signupModel.getSignUpsForGame(gameId);
+    const gameInfo = await GameService.getGameById(gameId);
+    
+    if (signUps.filter(s => s.Role === PlayerRole.MAIN).length < gameInfo.MaxPlayers) {
+      const earliestSubstitute = signUps
+        .filter(s => s.Role === PlayerRole.SUBSTITUTE)
+        .sort((a, b) => new Date(a.SignUpDate) - new Date(b.SignUpDate))[0];
+      if (earliestSubstitute) {
+        await signupModel.updateSignUpRole(gameId, earliestSubstitute.PlayerId, PlayerRole.MAIN);
+        signUps = await signupModel.getSignUpsForGame(gameId); // Refresh the sign-ups list after promotion
+      }
+    }
+
+    if (gameInfo.Status === GameStatus.FULL && signUps.length < gameInfo.MaxPlayers + gameInfo.MaxSubstitutes) {
       await GameService.updateGameStatus(gameId, GameStatus.OPEN)
     }
 

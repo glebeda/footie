@@ -4,22 +4,24 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import './PlayerRow.css'
 import { TableCell, TableRow, IconButton } from '@mui/material'
 
-const PlayerRow = forwardRef(({ player, index, handleOpenDialog, highlightedIndex, isRemoving, showAlert, hideAlert }, ref) => {
+const PlayerRow = forwardRef(({ player, index, handleOpenDialog, isHighlighting, isRemoving, showAlert, hideAlert, isSubstitute }, ref) => {
 
   const rowClasses = [
-    index === highlightedIndex ? 'highlighted-row' : '',
+    isSubstitute ? 'substitute-row' : '', 
+    isHighlighting ? 'highlighted-row' : '', 
     isRemoving ? 'removing' : '',
   ].filter(Boolean).join(' ');
 
   return (
     <TableRow ref={ref} className={rowClasses}>
       <TableCell component='th' scope='row'>
-        {index + 1}
+        {index}
       </TableCell>
       <TableCell>{player.name}</TableCell>
       <TableCell align='right'>
         <PaidCheckbox 
           player={player} 
+          disabled={isSubstitute} 
           showAlert={showAlert} 
           hideAlert={hideAlert} 
         />

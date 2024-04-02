@@ -1,11 +1,11 @@
-const signupService = require('../../src/services/signupService');
-const signupModel = require('../../src/models/signupModel');
-const gameService = require('../../src/services/gameService');
-const playerService = require('../../src/services/playerService');
+const signupService = require('../../../src/services/signupService');
+const signupModel = require('../../../src/models/signupModel');
+const gameService = require('../../../src/services/gameService');
+const playerService = require('../../../src/services/playerService');
 
-jest.mock('../../src/models/signupModel');
-jest.mock('../../src/services/gameService');
-jest.mock('../../src/services/playerService');
+jest.mock('../../../src/models/signupModel');
+jest.mock('../../../src/services/gameService');
+jest.mock('../../../src/services/playerService');
 
 
 describe('signupServiceGetUpcoming', () => {

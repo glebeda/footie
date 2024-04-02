@@ -15,6 +15,7 @@ const AdminPage = () => {
   const [gameDate, setGameDate] = useState(getNextGameTime());
   const [location, setLocation] = useState('Goals Chingford');
   const [maxPlayers, setMaxPlayers] = useState(10);
+  const [MaxSubstitutes, setMaxSubstitutes] = useState(2);
   const [isCancelling, setIsCancelling] = useState(false);
   const [upcomingGame, setUpcomingGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,7 +55,8 @@ const AdminPage = () => {
     const gameData = {
       Date: gameDate,
       Location: location,
-      MaxPlayers: maxPlayers,
+      MaxPlayers: parseInt(maxPlayers, 10), 
+      MaxSubstitutes: parseInt(MaxSubstitutes, 10),
       Status: 'OPEN' // Hardcoded as it should be always OPEN on creation
     }
 
@@ -94,6 +96,14 @@ const AdminPage = () => {
         type='number'
         value={maxPlayers}
         onChange={e => setMaxPlayers(e.target.value)}
+        fullWidth
+        margin='normal'
+      />
+      <TextField
+        label='Max Substitutes'
+        type='number'
+        value={MaxSubstitutes}
+        onChange={e => setMaxSubstitutes(e.target.value)}
         fullWidth
         margin='normal'
       />

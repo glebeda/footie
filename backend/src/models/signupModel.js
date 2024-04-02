@@ -3,7 +3,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
 const TABLE_NAME = 'Sign-ups'
 
-const addSignUp = async (gameId, playerId) => {
+const addSignUp = async (gameId, playerId, role) => {
   const params = {
     TableName: TABLE_NAME,
     Item: {
@@ -11,6 +11,7 @@ const addSignUp = async (gameId, playerId) => {
       PlayerId: playerId,
       SignUpDate: new Date().toISOString(),
       Paid: false,
+      Role: role,
     }
   }
 
@@ -103,10 +104,38 @@ async function updatePaymentStatus (gameId, playerId, paid) {
   }
 }
 
+async function updateSignUpRole(gameId, playerId, newRole) {
+  const params = {
+    TableName: TABLE_NAME,
+    Key: {
+      GameId: gameId,
+      PlayerId: playerId,
+    },
+    UpdateExpression: 'set #roleAttribute = :newRole', 
+    ExpressionAttributeNames: {
+      '#roleAttribute': 'Role', 
+    },
+    ExpressionAttributeValues: {
+      ':newRole': newRole,
+    },
+    ReturnValues: 'ALL_NEW',
+  };
+
+  try {
+    const result = await dynamoDb.update(params).promise();
+    return result.Attributes;
+  } catch (error) {
+    console.error('Error updating sign-up role:', error);
+    throw new Error('Error updating sign-up role');
+  }
+}
+
+
 module.exports = {
   addSignUp,
   getSignUpsForGame,
   deleteSignUp,
   checkSignUpExists,
-  updatePaymentStatus
+  updatePaymentStatus,
+  updateSignUpRole
 }
