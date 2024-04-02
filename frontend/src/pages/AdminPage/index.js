@@ -55,8 +55,8 @@ const AdminPage = () => {
     const gameData = {
       Date: gameDate,
       Location: location,
-      MaxPlayers: maxPlayers,
-      MaxSubstitutes: MaxSubstitutes,
+      MaxPlayers: parseInt(maxPlayers, 10), 
+      MaxSubstitutes: parseInt(MaxSubstitutes, 10),
       Status: 'OPEN' // Hardcoded as it should be always OPEN on creation
     }
 

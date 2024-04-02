@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { updatePaymentStatus } from '../../api/signupService';
 import { updatePlayerPaidStatus } from '../../redux/slices/signupSlice';
 
-const PaidCheckbox = ({ player, showAlert, hideAlert }) => {
+const PaidCheckbox = ({ player, disabled, showAlert, hideAlert }) => {
   const dispatch = useDispatch();
 
   const handlePaymentStatusChange = async (event) => {
@@ -25,6 +25,7 @@ const PaidCheckbox = ({ player, showAlert, hideAlert }) => {
       checked={player.paid}
       onChange={handlePaymentStatusChange}
       inputProps={{ 'aria-label': 'controlled' }}
+      disabled={disabled} 
     />
   );
 };

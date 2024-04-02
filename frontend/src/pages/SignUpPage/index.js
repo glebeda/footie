@@ -21,7 +21,7 @@ const SignUpPage = () => {
   const { players, gameDetails, isLoadingGameDetails } = useSelector(state => state.signup);
   const [playerName, setPlayerName] = useState('')
   const [signupOccurred, setSignupOccurred] = useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState(null)
+  const [isHighlighting, setIsHighlighting] = useState(null)
   const [alertInfo, setAlertInfo] = useState({
     open: false,
     message: '',
@@ -50,7 +50,8 @@ const SignUpPage = () => {
         playerName
       })
       setPlayerName('')
-      setHighlightedIndex(signupDetails.playerId)
+      setIsHighlighting(signupDetails.playerId);
+      setTimeout(() => setIsHighlighting(null), 2000);
       setSignupOccurred(true);
       const newPlayer = {
         name: playerName,
@@ -117,7 +118,8 @@ const SignUpPage = () => {
       <PlayerList
         players={players}
         maxPlayers={gameDetails?.maxPlayers}
-        highlightedIndex={highlightedIndex}
+        maxSubstitutes={gameDetails?.maxSubstitutes}
+        isHighlighting={isHighlighting}
         showAlert={showAlert}
         hideAlert={hideAlert}
         signupOccurred={signupOccurred}

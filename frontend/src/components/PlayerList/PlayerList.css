@@ -10,6 +10,10 @@
   .highlighted-row {
     animation: fadeInHighlight 2s forwards;
   }
+
+  .substitute-row {
+    background-color: #ffe4b5; 
+  }
   
   .player-list-container {
     margin-top: 0.6rem;

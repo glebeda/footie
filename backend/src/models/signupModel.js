@@ -111,7 +111,10 @@ async function updateSignUpRole(gameId, playerId, newRole) {
       GameId: gameId,
       PlayerId: playerId,
     },
-    UpdateExpression: 'set Role = :newRole',
+    UpdateExpression: 'set #roleAttribute = :newRole', 
+    ExpressionAttributeNames: {
+      '#roleAttribute': 'Role', 
+    },
     ExpressionAttributeValues: {
       ':newRole': newRole,
     },

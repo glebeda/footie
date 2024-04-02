@@ -16,12 +16,14 @@ import {
   Checkbox,
 } from '@mui/material'
 
-function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAlert, signupOccurred }) {
+function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, showAlert, hideAlert, signupOccurred }) {
   const lastRowRef = useRef(null);
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
   const [removingPlayerId, setRemovingPlayerId] = useState(null);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const totalSlots = maxPlayers + maxSubstitutes;
 
   useEffect(() => {
     if (signupOccurred && lastRowRef.current) {
@@ -71,36 +73,41 @@ function PlayerList ({ players, maxPlayers, highlightedIndex, showAlert, hideAle
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {players.map((player, index) => (
-              <PlayerRow
-                key={player.name}
-                player={player}
-                ref={index === players.length - 1 ? lastRowRef : null} 
-                index={index}
-                handleOpenDialog={handleOpenDialog}
-                highlightedIndex={
-                  highlightedIndex === player.playerId ? index : null
-                }
-                isRemoving={removingPlayerId === player.playerId}
-                showAlert={showAlert} 
-                hideAlert={hideAlert} 
-              />
-            ))}
-            {Array.from({ length: maxPlayers - players.length }, (_, index) => (
-              <TableRow key={`empty-${index}`}>
-                <TableCell component='th' scope='row'>
-                  {players.length + index + 1}
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell align='right'>
-                  <Checkbox disabled />
-                </TableCell>
-                <TableCell align='right'>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+           <TableBody>
+  {players.map((player, playerIndex) => (
+    <PlayerRow
+      key={`player-${player.playerId}`}
+      player={player}
+      ref={playerIndex === players.length - 1 ? lastRowRef : null} 
+      index={playerIndex + 1}
+      isSubstitute={playerIndex >= maxPlayers}
+      handleOpenDialog={handleOpenDialog}
+      isHighlighting={isHighlighting === player.playerId ? player.playerId : null}
+      isRemoving={removingPlayerId === player.playerId}
+      showAlert={showAlert} 
+      hideAlert={hideAlert}
+    />
+  ))}
+  {Array.from({ length: totalSlots - players.length }, (_, emptyIndex) => {
+    const displayIndex = players.length + emptyIndex + 1; // Calculate the index for empty slots
+    const isSubstitute = displayIndex > maxPlayers;
+    const rowClass = isSubstitute ? 'substitute-row' : '';
+
+    return (
+      <TableRow key={`empty-${displayIndex}`} className={rowClass}>
+        <TableCell component='th' scope='row'>
+          {displayIndex}
+        </TableCell>
+        <TableCell></TableCell>
+        <TableCell align='right'>
+          <Checkbox disabled />
+        </TableCell>
+        <TableCell></TableCell>
+      </TableRow>
+    );
+  })}
+</TableBody>
+
         </Table>
       </TableContainer>
       <CancelDialog

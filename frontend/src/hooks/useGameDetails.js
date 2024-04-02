@@ -17,6 +17,7 @@ export const useGameDetails = () => {
         playerId: signUp.playerId,
         gameId: game.gameId,
         paid: signUp.paid,
+        role: signUp.role,
       }))));
     } catch (error) {
       if (error.message === 'No upcoming games found') {
