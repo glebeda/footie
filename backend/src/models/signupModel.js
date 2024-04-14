@@ -130,6 +130,31 @@ async function updateSignUpRole(gameId, playerId, newRole) {
   }
 }
 
+async function updateSignUpTeam(gameId, playerId, newTeam) {
+  const params = {
+    TableName: TABLE_NAME,
+    Key: {
+      GameId: gameId,
+      PlayerId: playerId,
+    },
+    UpdateExpression: 'set #team = :newTeam',
+    ExpressionAttributeNames: {
+      '#team': 'Team',
+    },
+    ExpressionAttributeValues: {
+      ':newTeam': newTeam,
+    },
+    ReturnValues: 'ALL_NEW',
+  };
+
+  try {
+    const result = await dynamoDb.update(params).promise();
+    return result.Attributes;
+  } catch (error) {
+    console.error('Error updating sign-up team:', error);
+    throw new Error('Error updating sign-up team');
+  }
+}
 
 module.exports = {
   addSignUp,
@@ -137,5 +162,6 @@ module.exports = {
   deleteSignUp,
   checkSignUpExists,
   updatePaymentStatus,
-  updateSignUpRole
+  updateSignUpRole,
+  updateSignUpTeam
 }

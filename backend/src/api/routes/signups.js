@@ -25,14 +25,14 @@ router.post('/', async (req, res) => {
 
 router.get('/upcoming', async (req, res) => {
   try {
-    const data = await signupService.getUpcomingGameWithSignups();
+    const data = await signupService.getUpcomingGameWithSignups()
     if (!data.game) {
-      return res.status(404).json({ message: 'No upcoming games found' });
+      return res.status(404).json({ message: 'No upcoming games found' })
     }
-    res.json(data);
+    res.json(data)
   } catch (error) {
-    console.error(`Error fetching upcoming game with signups:`, error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error(`Error fetching upcoming game with signups:`, error)
+    res.status(500).json({ message: 'Internal Server Error' })
   }
 })
 
@@ -103,5 +103,21 @@ router.patch('/:gameId/:playerId/unpay', async (req, res) => {
     res.status(500).json({ error: error.toString() })
   }
 })
+
+router.patch('/:gameId/:playerId/team', async (req, res) => {
+  const { gameId, playerId } = req.params;
+  const { team } = req.body;
+
+  try {
+    const updatedSignUp = await signupService.updateTeamAssignment(gameId, playerId, team);
+    res.status(200).json({
+      message: 'Team updated successfully',
+      updatedSignUp
+    });
+  } catch (error) {
+    console.error('Failed to update sign up team:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router

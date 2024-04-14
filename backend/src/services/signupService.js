@@ -3,6 +3,7 @@ const signupModel = require('../models/signupModel')
 const GameService = require('../services/gameService')
 const GameStatus = require('../constants/gameStatus')
 const PlayerRole = require('../constants/playerRole')
+const Team = require('../constants/team')
 
 const signUpService = {
   async addSignUp (gameId, playerName) {
@@ -117,7 +118,21 @@ const signUpService = {
       console.error('Error updating payment status for the game:', error)
       throw error
     }
-  }
+  },
+
+  async updateTeamAssignment(gameId, playerId, team) {
+    if (!Object.values(Team).includes(team)) {
+      throw new Error(`Invalid team value. Allowed values are ${Object.values(Team).join(', ')}`);
+    }
+
+    try {
+      const updatedSignUp = await signupModel.updateSignUpTeam(gameId, playerId, team);
+      return updatedSignUp;
+    } catch (error) {
+      console.error('Failed to update team:', error);
+      throw error;
+    }
+  },
 }
 
 module.exports = signUpService
