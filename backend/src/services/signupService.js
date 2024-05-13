@@ -133,6 +133,22 @@ const signUpService = {
       throw error;
     }
   },
+
+  async updateMultipleTeamAssignments(gameId, teamAssignments) {
+    try {
+      const updatedSignUps = [];
+
+      for (const { playerId, team } of teamAssignments) {
+        const updatedSignUp = await this.updateTeamAssignment(gameId, playerId, team);
+        updatedSignUps.push(updatedSignUp);
+      }
+
+      return updatedSignUps;
+    } catch (error) {
+      console.error('Error updating multiple team assignments:', error);
+      throw new Error('Unable to update multiple team assignments');
+    }
+  }
 }
 
 module.exports = signUpService

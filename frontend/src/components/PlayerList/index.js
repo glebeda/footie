@@ -22,8 +22,8 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
   const [selectedPlayer, setSelectedPlayer] = useState(null)
   const [removingPlayerId, setRemovingPlayerId] = useState(null);
   const dispatch = useDispatch();
-
   const totalSlots = maxPlayers + maxSubstitutes;
+  const hasTeamAssignments = players.some(player => player.team); 
 
   useEffect(() => {
     if (signupOccurred && lastRowRef.current) {
@@ -70,6 +70,7 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
               <TableCell>#</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align='right'>Paid</TableCell>
+              {hasTeamAssignments && <TableCell align="center">Team</TableCell>}
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -86,6 +87,7 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
       isRemoving={removingPlayerId === player.playerId}
       showAlert={showAlert} 
       hideAlert={hideAlert}
+      hasTeamAssignments={hasTeamAssignments}
     />
   ))}
   {Array.from({ length: totalSlots - players.length }, (_, emptyIndex) => {
@@ -102,7 +104,8 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
         <TableCell align='right'>
           <Checkbox disabled />
         </TableCell>
-        <TableCell></TableCell>
+        {hasTeamAssignments && <TableCell></TableCell>}
+        <TableCell></TableCell> 
       </TableRow>
     );
   })}

@@ -53,3 +53,13 @@ export const updatePaymentStatus = (gameId, playerId, paid) => {
       throw error;
     });
 };
+
+export const updateMultiplePlayersTeams = (gameId, teamAssignments) => {
+  const endpoint = `/signups/${gameId}/teams`;
+  return axios.patch(endpoint, { teamAssignments })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error updating multiple players teams:', error);
+      throw error;
+    });
+};

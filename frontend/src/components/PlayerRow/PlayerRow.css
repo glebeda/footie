@@ -8,6 +8,18 @@
   background-color: rgba(255, 0, 0, 0.1); 
 }
 
+.cancel-icon-cell, .team-icon-cell {
+  min-width: 50px; 
+  width: auto; 
+}
+
+@media (max-width: 600px) {
+  .narrow-cell {
+    min-width: 30px !important;
+    width: 30px !important;
+  }
+}
+
 @keyframes fadeOut {
   to {
     opacity: 0;
