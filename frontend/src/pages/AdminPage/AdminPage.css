@@ -15,10 +15,20 @@ input[type="number"] {
   align-items: center;
 }
 
+.team-selection-title {
+  margin-top: 15px !important;
+}
+
+.team-selection-button-container {
+  margin-top: 9px; 
+  margin-bottom: 9px; 
+}
+
 @media (max-width: 600px) {
   .button-container {
     flex-direction: column; 
   }
+
   .button-container button {
     margin-top: 10px; 
     padding: 6px 12px; 

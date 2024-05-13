@@ -1,0 +1,15 @@
+.player-list-container {
+    margin-top: 0.6rem;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  
+  .team-selection-row {
+    background-color: #f5f5f5;
+  }
+  
+  .radio-group {
+    display: flex;
+    justify-content: flex-end;
+  }
+  

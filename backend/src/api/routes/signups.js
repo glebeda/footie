@@ -120,4 +120,20 @@ router.patch('/:gameId/:playerId/team', async (req, res) => {
   }
 });
 
+router.patch('/:gameId/teams', async (req, res) => {
+  const { gameId } = req.params;
+  const { teamAssignments } = req.body; // Array of { playerId, team }
+
+  try {
+    const updatedSignUps = await signupService.updateMultipleTeamAssignments(gameId, teamAssignments);
+    res.status(200).json({
+      message: 'Teams updated successfully',
+      updatedSignUps
+    });
+  } catch (error) {
+    console.error('Failed to update multiple teams:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router
