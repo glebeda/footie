@@ -13,12 +13,12 @@ describe('CancelDialog', () => {
 
   it('does not render dialog content when not open', () => {
     render(<CancelDialog open={false} onConfirm={onConfirmMock} onCancel={onCancelMock} />);
-    expect(screen.queryByText('Are you sure you want to cancel sign-up?')).not.toBeInTheDocument();
+    expect(screen.queryByText('Are you sure you want to cancel sign-up mate?')).not.toBeInTheDocument();
   });
 
   it('calls onCancel when No, Keep is clicked', () => {
     render(<CancelDialog open={true} onConfirm={onConfirmMock} onCancel={onCancelMock} />);
-    fireEvent.click(screen.getByText('No, Keep'));
+    fireEvent.click(screen.getByText('No, Keep peep'));
     expect(onCancelMock).toHaveBeenCalledTimes(1);
   });
 

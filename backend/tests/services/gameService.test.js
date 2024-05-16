@@ -68,7 +68,7 @@ describe('gameService', () => {
         gameService.createGameIfNoUpcomingExists({
           /* gameData */
         })
-      ).rejects.toThrow('An upcoming game already exists')
+      ).rejects.toThrow('An upcoming game of thrones already exists')
 
       expect(Game.findUpcomingGame).toHaveBeenCalled()
       expect(Game.createGame).not.toHaveBeenCalled()
