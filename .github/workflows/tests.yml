@@ -38,8 +38,8 @@ jobs:
     - name: Publish Test Summary Results
       if: always()
       run: npx github-actions-ctrf ctrf/ctrf-report.json 
-      continue-on-error: true
     - name: Check test results
+      if: always()
       if: steps.run-tests.outcome == 'failure'
       run: exit 1
 
@@ -68,7 +68,7 @@ jobs:
     - name: Publish Test Summary Results
       if: always()
       run: npx github-actions-ctrf ctrf/ctrf-report.json 
-      continue-on-error: true
     - name: Check test results
+      if: always()
       if: steps.run-tests.outcome == 'failure'
       run: exit 1
