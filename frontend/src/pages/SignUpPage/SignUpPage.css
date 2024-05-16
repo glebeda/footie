@@ -40,4 +40,27 @@
         width: 100%;
     }
   }
+
+  .team-lists-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
   
+  @media (min-width: 600px) {
+    .team-lists-container {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  
+  .player-lists-container {
+    margin-top: 2rem;
+  }
+  
+  .team-title {
+    text-align: center;
+    font-weight: bold;
+    padding: 0.5rem;
+    background-color: #f5f5f5;
+  }

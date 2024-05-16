@@ -14,6 +14,7 @@ import { signUpPlayer } from '../../api/signupService'
 import { scrollToTop } from '../../utils/scrollUtils'
 import { addPlayer } from '../../redux/slices/signupSlice';
 import { formatDate } from '../../utils/dateUtils';
+import TeamPlayerList from '../../components/TeamPlayerList';
 import './SignUpPage.css'
 
 const SignUpPage = () => {
@@ -65,7 +66,7 @@ const SignUpPage = () => {
       console.error(error.message);
       showAlert(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     if (signupOccurred) {
@@ -80,6 +81,11 @@ const SignUpPage = () => {
   if (!gameDetails) {
     return <EmptyState />;
   }
+
+  const lightsPlayers = players.filter(player => player.team === 'LIGHTS');
+  const darksPlayers = players.filter(player => player.team === 'DARKS');
+  const unassignedPlayers = players.filter(player => !player.team);
+  const hasTeamAssignments = lightsPlayers.length > 0 || darksPlayers.length > 0;
 
   return (
     <Container maxWidth='sm'>
@@ -115,6 +121,12 @@ const SignUpPage = () => {
           Sign Up
         </PrimaryButton>
       </form>
+      {hasTeamAssignments && (
+        <div className="team-lists-container">
+          <TeamPlayerList teamName="Lights" players={lightsPlayers} />
+          <TeamPlayerList teamName="Darks" players={darksPlayers} />
+        </div>
+      )}
       <PlayerList
         players={players}
         maxPlayers={gameDetails?.maxPlayers}

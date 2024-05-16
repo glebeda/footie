@@ -14,6 +14,7 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  Typography,
 } from '@mui/material'
 
 function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, showAlert, hideAlert, signupOccurred }) {
@@ -23,7 +24,11 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
   const [removingPlayerId, setRemovingPlayerId] = useState(null);
   const dispatch = useDispatch();
   const totalSlots = maxPlayers + maxSubstitutes;
-  const hasTeamAssignments = players.some(player => player.team); 
+
+  const lightsPlayers = players.filter(player => player.team === 'LIGHTS');
+  const darksPlayers = players.filter(player => player.team === 'DARKS');
+
+  const anyPlayersAssigned = lightsPlayers.length > 0 || darksPlayers.length > 0;
 
   useEffect(() => {
     if (signupOccurred && lastRowRef.current) {
@@ -64,13 +69,19 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
   return (
     <>
       <TableContainer className='player-list-container' component={Paper}>
+         {anyPlayersAssigned && (
+          <div className="signup-title">
+            <Typography variant="h6" component="div">
+              All Sign Ups
+            </Typography>
+          </div>
+        )}
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow>
               <TableCell>#</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align='right'>Paid</TableCell>
-              {hasTeamAssignments && <TableCell align="center">Team</TableCell>}
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -87,7 +98,6 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
       isRemoving={removingPlayerId === player.playerId}
       showAlert={showAlert} 
       hideAlert={hideAlert}
-      hasTeamAssignments={hasTeamAssignments}
     />
   ))}
   {Array.from({ length: totalSlots - players.length }, (_, emptyIndex) => {
@@ -104,8 +114,7 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
         <TableCell align='right'>
           <Checkbox disabled />
         </TableCell>
-        {hasTeamAssignments && <TableCell></TableCell>}
-        <TableCell></TableCell> 
+        <TableCell></TableCell>
       </TableRow>
     );
   })}

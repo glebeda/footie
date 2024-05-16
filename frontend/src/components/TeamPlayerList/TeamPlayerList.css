@@ -1,21 +1,4 @@
-@keyframes fadeInHighlight {
-  from {
-    background-color: #d4edda;
-  }
-  to {
-    background-color: transparent;
-  }
-}
-
-.highlighted-row {
-  animation: fadeInHighlight 2s forwards;
-}
-
-.substitute-row {
-  background-color: #ffe4b5; 
-}
-
-.player-list-container {
+.team-player-list-container {
   margin-top: 0.6rem;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -26,7 +9,15 @@
   box-sizing: border-box; 
 }
 
-.signup-title {
+.team-player-list-container.lights {
+  border-top: 5px solid #fbc02d;
+}
+
+.team-player-list-container.darks {
+  border-top: 5px solid #607d8b;
+}
+
+.team-title {
   text-align: center;
   font-weight: bold;
   padding: 0.5rem 0;
@@ -37,11 +28,16 @@
   border-radius: 4px;
 }
 
-.signup-title {
+.team-title .team-icon {
   margin-right: 8px;
 }
 
-.signup-title > h6 {
-  margin: 0;
+.team-row {
+  &:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
 }
 
+.team-title > h6 {
+  margin: 0;
+}
