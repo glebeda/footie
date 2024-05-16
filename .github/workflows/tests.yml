@@ -41,7 +41,7 @@ jobs:
     - name: Check test results
       if: always()
       run: |
-        if grep -q '"numFailedTests": 0' ctrf/ctrf-report.json; then
+        if grep -q '"failed": 0,' ctrf/ctrf-report.json; then
           echo "All tests passed."
         else
           echo "Some tests failed."
@@ -76,7 +76,7 @@ jobs:
     - name: Check test results
       if: always()
       run: |
-        if grep -q '"numFailedTests": 0' ctrf/ctrf-report.json; then
+        if grep -q '"failed": 0,' ctrf/ctrf-report.json; then
           echo "All tests passed."
         else
           echo "Some tests failed."
