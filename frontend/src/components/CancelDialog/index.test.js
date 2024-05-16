@@ -19,13 +19,13 @@ describe('CancelDialog', () => {
   it('calls onCancel when No, Keep is clicked', () => {
     render(<CancelDialog open={true} onConfirm={onConfirmMock} onCancel={onCancelMock} />);
     fireEvent.click(screen.getByText('No, Keep'));
-    expect(onCancelMock).toHaveBeenCalledTimes(2);
+    expect(onCancelMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls onConfirm when Yes, Cancel is clicked', () => {
     render(<CancelDialog open={true} onConfirm={onConfirmMock} onCancel={onCancelMock} />);
     fireEvent.click(screen.getByText('Yes, Cancel'));
-    expect(onConfirmMock).toHaveBeenCalledTimes(3);
+    expect(onConfirmMock).toHaveBeenCalledTimes(1);
   });
 
 });
