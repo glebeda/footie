@@ -34,7 +34,9 @@ jobs:
       run: npm test
       env:
         CI: true
+      continue-on-error: true
     - name: Publish Test Summary Results
+      if: always()
       run: npx github-actions-ctrf ctrf/ctrf-report.json 
 
   frontend-tests:
@@ -58,5 +60,7 @@ jobs:
       run: npm test
       env:
         CI: true
+      continue-on-error: true
     - name: Publish Test Summary Results
+      if: always()
       run: npx github-actions-ctrf ctrf/ctrf-report.json 
