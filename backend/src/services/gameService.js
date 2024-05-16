@@ -54,6 +54,5 @@ const gameService = {
     }
   }
 }
-//ololo
 
 module.exports = gameService
