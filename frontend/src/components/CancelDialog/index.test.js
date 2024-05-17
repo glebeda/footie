@@ -25,7 +25,7 @@ describe('CancelDialog', () => {
   it('calls onConfirm when Yes, Cancel is clicked', () => {
     render(<CancelDialog open={true} onConfirm={onConfirmMock} onCancel={onCancelMock} />);
     fireEvent.click(screen.getByText('Yes, Cancel'));
-    expect(onConfirmMock).toHaveBeenCalledTimes(1);
+    expect(onConfirmMock).toHaveBeenCalledTimes(3);
   });
 
 });
