@@ -11,7 +11,7 @@ function PlayerListWithTeamSelection({ players, teamAssignments, handleTeamChang
       <Table aria-label='simple table'>
         <TableHead>
           <TableRow>
-            <TableCell>#</TableCell>
+            <TableCell className='fixed-width'>#</TableCell>
             <TableCell>Name</TableCell>
             <TableCell align='left'>Team</TableCell>
           </TableRow>

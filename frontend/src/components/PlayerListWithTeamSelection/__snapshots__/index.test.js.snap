@@ -16,7 +16,7 @@ exports[`PlayerListWithTeamSelection matches the snapshot 1`] = `
           class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
         >
           <th
-            class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+            class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium fixed-width css-1ygcj2i-MuiTableCell-root"
             scope="col"
           >
             #

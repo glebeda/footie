@@ -22,7 +22,7 @@ const PlayerRow = forwardRef(({
 
   return (
     <TableRow ref={ref} className={rowClasses}>
-      <TableCell component='th' scope='row'>
+      <TableCell className='fixed-width' component='th' scope='row'>
         {index}
       </TableCell>
       <TableCell>{player.name}</TableCell>

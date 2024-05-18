@@ -8,7 +8,7 @@ const PlayerRowWithTeamSelection = forwardRef(({ player, index, team, handleTeam
   
     return (
       <TableRow ref={ref} className='team-selection-row'>
-        <TableCell component='th' scope='row'>
+        <TableCell className='fixed-width' component='th' scope='row'>
           {index}
         </TableCell>
         <TableCell>{player.name}</TableCell>
