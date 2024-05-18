@@ -1,3 +1,26 @@
+.MuiTableCell-root {
+  font-size: 1rem !important; 
+  padding: 8px !important;    
+}
+
+.MuiTableRow-root {
+  height: auto !important;   
+}
+
+.fixed-width {
+  width: 50px; 
+  max-width: 50px;
+  min-width: 50px;
+}
+
+@media (max-width: 600px) {
+  .fixed-width {
+    width: 25px;
+    max-width: 25px;
+    min-width: 25px;
+  }
+} 
+
 @keyframes fadeInHighlight {
   from {
     background-color: #d4edda;

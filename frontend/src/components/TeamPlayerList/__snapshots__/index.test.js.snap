@@ -36,7 +36,7 @@ exports[`TeamPlayerList matches the snapshot with players 1`] = `
           class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
         >
           <th
-            class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+            class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium fixed-width css-1ygcj2i-MuiTableCell-root"
             scope="col"
           >
             #
@@ -56,7 +56,7 @@ exports[`TeamPlayerList matches the snapshot with players 1`] = `
           class="MuiTableRow-root team-row css-1q1u3t4-MuiTableRow-root"
         >
           <th
-            class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+            class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium fixed-width css-1ex1afd-MuiTableCell-root"
             scope="row"
           >
             1
@@ -71,7 +71,7 @@ exports[`TeamPlayerList matches the snapshot with players 1`] = `
           class="MuiTableRow-root team-row css-1q1u3t4-MuiTableRow-root"
         >
           <th
-            class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+            class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium fixed-width css-1ex1afd-MuiTableCell-root"
             scope="row"
           >
             2
@@ -86,7 +86,7 @@ exports[`TeamPlayerList matches the snapshot with players 1`] = `
           class="MuiTableRow-root team-row css-1q1u3t4-MuiTableRow-root"
         >
           <th
-            class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-1ex1afd-MuiTableCell-root"
+            class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium fixed-width css-1ex1afd-MuiTableCell-root"
             scope="row"
           >
             3
@@ -139,7 +139,7 @@ exports[`TeamPlayerList matches the snapshot without players 1`] = `
           class="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
         >
           <th
-            class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
+            class="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium fixed-width css-1ygcj2i-MuiTableCell-root"
             scope="col"
           >
             #

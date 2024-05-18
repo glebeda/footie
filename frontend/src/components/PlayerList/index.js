@@ -79,7 +79,7 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
+              <TableCell className='fixed-width'>#</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align='right'>Paid</TableCell>
               <TableCell></TableCell>
@@ -107,7 +107,7 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
 
     return (
       <TableRow key={`empty-${displayIndex}`} className={rowClass}>
-        <TableCell component='th' scope='row'>
+        <TableCell className='fixed-width' component='th' scope='row'>
           {displayIndex}
         </TableCell>
         <TableCell></TableCell>

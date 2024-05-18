@@ -84,7 +84,6 @@ const SignUpPage = () => {
 
   const lightsPlayers = players.filter(player => player.team === 'LIGHTS');
   const darksPlayers = players.filter(player => player.team === 'DARKS');
-  const unassignedPlayers = players.filter(player => !player.team);
   const hasTeamAssignments = lightsPlayers.length > 0 || darksPlayers.length > 0;
 
   return (

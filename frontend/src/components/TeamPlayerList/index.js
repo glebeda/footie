@@ -20,14 +20,14 @@ function TeamPlayerList({ teamName, players }) {
       <Table aria-label={`${teamName} table`}>
         <TableHead>
           <TableRow>
-            <TableCell>#</TableCell>
+            <TableCell className='fixed-width'>#</TableCell>
             <TableCell>Name</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {players.map((player, index) => (
             <TableRow key={`player-${player.playerId}`} className="team-row">
-              <TableCell component='th' scope='row'>{index + 1}</TableCell>
+              <TableCell className='fixed-width' component='th' scope='row'>{index + 1}</TableCell>
               <TableCell>{player.name}</TableCell>
             </TableRow>
           ))}
