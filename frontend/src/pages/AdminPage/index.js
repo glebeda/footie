@@ -51,20 +51,14 @@ const AdminPage = () => {
   }
 
   const handleSaveAssignments = async () => {
-    try {
-      // Prepare assignments in the required structure
-      const teamAssignmentsArray = players
-      .filter((player) => player.role === 'MAIN') // Include only main players
-      .map((player) => ({
-        playerId: player.playerId,
-        team: teamAssignments[player.playerId] || '', // Get the assigned team or empty string if none
-      }));
+    const teamAssignmentsArray = players
+    .filter((player) => player.role === 'MAIN') // Include only main players
+    .map((player) => ({
+      playerId: player.playerId,
+      team: teamAssignments[player.playerId] || '', // Get the assigned team or empty string if none
+    }));
   
-      await updateMultiplePlayersTeams(gameDetails.gameId, teamAssignmentsArray);
-      alert('Team assignments saved successfully');
-    } catch (error) {
-      alert(`Failed to save team assignments: ${error.message}`);
-    }
+    await updateMultiplePlayersTeams(gameDetails.gameId, teamAssignmentsArray);
   };
 
   const handleCancelGame = async () => {
@@ -102,12 +96,17 @@ const AdminPage = () => {
 
   const handleCopyTeams = async () => {
     const teamData = formatTeamDataForClipboard(players, teamAssignments);
+    await navigator.clipboard.writeText(teamData);
+  };
+
+  const handleSaveAndCopy = async () => {
     try {
-      await navigator.clipboard.writeText(teamData);
-      alert('Team assignments copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-      alert('Failed to copy text to clipboard');
+      await handleSaveAssignments();
+      await handleCopyTeams();
+      alert('Teams saved and copied to clipboard');
+    } catch (error) {
+      console.error('Error saving and copying teams:', error);
+      alert('Failed to save and copy teams. Please try again.');
     }
   };
 
@@ -182,13 +181,12 @@ const AdminPage = () => {
             handleTeamChange={handleTeamChange}
           />
           <div className='button-container team-selection-button-container'>
-            <PrimaryButton onClick={handleSaveAssignments} disabled={!allTeamsAssigned}>Save Assignments</PrimaryButton>
             <PrimaryButton
-              onClick={handleCopyTeams}
-              color='secondary'
+              onClick={handleSaveAndCopy}
               disabled={!allTeamsAssigned}
-              style={{ marginLeft: 'auto' }}>
-              Copy to Clipboard
+              color='primary'
+              style={{ marginLeft: 'auto'}}>
+              Save and Copy Teams
             </PrimaryButton>
           </div>
         </>
