@@ -51,18 +51,14 @@ const AdminPage = () => {
   }
 
   const handleSaveAssignments = async () => {
-    try {
-      const teamAssignmentsArray = players
-      .filter((player) => player.role === 'MAIN') // Include only main players
-      .map((player) => ({
-        playerId: player.playerId,
-        team: teamAssignments[player.playerId] || '', // Get the assigned team or empty string if none
-      }));
+    const teamAssignmentsArray = players
+    .filter((player) => player.role === 'MAIN') // Include only main players
+    .map((player) => ({
+      playerId: player.playerId,
+      team: teamAssignments[player.playerId] || '', // Get the assigned team or empty string if none
+    }));
   
-      await updateMultiplePlayersTeams(gameDetails.gameId, teamAssignmentsArray);
-    } catch (error) {
-      alert(`Failed to save team assignments: ${error.message}`);
-    }
+    await updateMultiplePlayersTeams(gameDetails.gameId, teamAssignmentsArray);
   };
 
   const handleCancelGame = async () => {
@@ -107,7 +103,7 @@ const AdminPage = () => {
     try {
       await handleSaveAssignments();
       await handleCopyTeams();
-      alert('Teams saved and copied to clipboard!');
+      alert('Teams saved and copied to clipboard');
     } catch (error) {
       console.error('Error saving and copying teams:', error);
       alert('Failed to save and copy teams. Please try again.');
@@ -115,6 +111,10 @@ const AdminPage = () => {
   };
 
   const hasPlayers = players && players.some((player) => player.role === 'MAIN');
+
+  const allTeamsAssigned = players
+    .filter((player) => player.role === 'MAIN')
+    .every((player) => teamAssignments[player.playerId] === 'LIGHTS' || teamAssignments[player.playerId] === 'DARKS');
 
   return (
     <Container maxWidth='sm'>
@@ -183,6 +183,7 @@ const AdminPage = () => {
           <div className='button-container team-selection-button-container'>
             <PrimaryButton
               onClick={handleSaveAndCopy}
+              disabled={!allTeamsAssigned}
               color='primary'
               style={{ marginLeft: 'auto'}}>
               Save and Copy Teams
