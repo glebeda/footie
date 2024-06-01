@@ -10,7 +10,7 @@ S3_BUCKET="footie-backend-distrib"
 
 # Navigate to the backend directory
 echo "Navigating to backend directory..."
-cd $BACKEND_DIR
+cd $BACKEND_DIR || exit
 
 # Disable AWS CLI pager
 export AWS_PAGER=""
