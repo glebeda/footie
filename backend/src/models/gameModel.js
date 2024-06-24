@@ -128,6 +128,28 @@ const findUpcomingGame = async () => {
   }
 };
 
+const getPastGames = async () => {
+  const params = {
+    TableName: TABLE_NAME,
+    FilterExpression: "#status = :playedStatus",
+    ExpressionAttributeNames: {
+      "#status": "Status",
+    },
+    ExpressionAttributeValues: {
+      ":playedStatus": GameStatus.PLAYED
+    },
+  };
+
+  try {
+    const result = await dynamoDb.scan(params).promise();
+    const pastGames = result.Items.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+    return pastGames;
+  } catch (error) {
+    console.error("Error fetching past games:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createGame,
   getGameById,
@@ -135,4 +157,5 @@ module.exports = {
   updateGameStatus,
   deleteGame,
   findUpcomingGame,
+  getPastGames,
 };

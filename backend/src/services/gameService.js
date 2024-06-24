@@ -1,4 +1,5 @@
 const Game = require('../models/gameModel')
+const GameStatus = require('../constants/gameStatus')
 
 const gameService = {
   async getGameById (gameId) {
@@ -52,7 +53,18 @@ const gameService = {
       console.error(`Error in gameService.createGameIfNoUpcomingExists:`, error)
       throw error
     }
+  },
+
+  async findPastGames() {
+    try {
+      const pastGames = await Game.getPastGames();
+      return pastGames;
+    } catch (error) {
+      console.error(`Error in gameService.findPastGames:`, error);
+      throw new Error('Error fetching past games');
+    }
   }
+
 }
 
 module.exports = gameService

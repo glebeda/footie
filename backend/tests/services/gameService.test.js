@@ -2,6 +2,7 @@ const Game = require('../../src/models/gameModel')
 const SignupService = require('../../src/services/signupService')
 const PlayerService = require('../../src/services/playerService')
 const gameService = require('../../src/services/gameService')
+const GameStatus = require('../../src/constants/gameStatus');
 
 jest.mock('../../src/models/gameModel')
 jest.mock('../../src/services/signupService')
@@ -42,13 +43,13 @@ describe('gameService', () => {
 
   describe('updateGameStatus', () => {
     it('successfully updates a game status', async () => {
-      const updatedGameStatus = { Status: 'PLAYED' }
+      const updatedGameStatus = { Status: GameStatus.PLAYED }
       Game.updateGameStatus.mockResolvedValue(updatedGameStatus)
 
-      const result = await gameService.updateGameStatus('testGameId', 'PLAYED')
+      const result = await gameService.updateGameStatus('testGameId', GameStatus.PLAYED)
 
       expect(result).toEqual(updatedGameStatus)
-      expect(Game.updateGameStatus).toHaveBeenCalledWith('testGameId', 'PLAYED')
+      expect(Game.updateGameStatus).toHaveBeenCalledWith('testGameId', GameStatus.PLAYED)
     })
   })
 
@@ -82,7 +83,7 @@ describe('gameService', () => {
         Location: 'Local Sports Center',
         MaxPlayers: 10,
         MaxSubstitutes: 2,
-        Status: 'OPEN'
+        Status: GameStatus.OPEN
       }
       const mockNewGame = { ...gameData, GameId: 'newGameId' }
       Game.createGame.mockResolvedValue(mockNewGame) 
@@ -94,4 +95,19 @@ describe('gameService', () => {
       expect(Game.createGame).toHaveBeenCalledWith(gameData) 
     })
   })
+
+  describe('gameService.findPastGames', () => {
+    it('should return past games excluding OPEN and CANCELLED statuses', async () => {
+      const mockGames = [
+        { gameId: '1', Status: GameStatus.PLAYED, Date: '2023-05-10' },
+        { gameId: '4', Status: GameStatus.PLAYED, Date: '2023-05-13' },
+      ];
+  
+      Game.getPastGames.mockResolvedValue(mockGames);
+  
+      const pastGames = await gameService.findPastGames();
+      expect(pastGames).toHaveLength(2);
+      expect(pastGames).toEqual(mockGames);
+    });
+  });
 })
