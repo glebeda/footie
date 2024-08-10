@@ -63,3 +63,21 @@ export const updateMultiplePlayersTeams = (gameId, teamAssignments) => {
       throw error;
     });
 };
+
+export const getSignupsForGame = (gameId) => {
+  return axios.get(`/signups/${gameId}`)
+    .then(response => response.data)
+    .catch(error => {
+      if (error.response) {
+        const { status, data } = error.response;
+        switch (status) {
+          case 404:
+            throw new Error('Signups not found.');
+          default:
+            throw new Error(data.error || 'Internal server error');
+        }
+      } else {
+        throw new Error('Network error. Please try again.');
+      }
+    });
+};

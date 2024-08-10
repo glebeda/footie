@@ -55,3 +55,37 @@ export const getUpcomingGame = () => {
       }
     });
 };
+
+export const getPastGames = () => {
+  return axios.get('/games/past')
+    .then(response => response.data)
+    .catch(error => {
+      if (error.response) {
+        const { status, data } = error.response;
+        switch (status) {
+          default:
+            throw new Error(data.error || 'Error fetching past games.');
+        }
+      } else {
+        throw new Error('Network error. Please try again.');
+      }
+    });
+};
+
+export const getGameById = (gameId) => {
+  return axios.get(`/games/${gameId}`)
+    .then(response => response.data)
+    .catch(error => {
+      if (error.response) {
+        const { status, data } = error.response;
+        switch (status) {
+          case 404:
+            throw new Error('Game not found.');
+          default:
+            throw new Error(data.error || 'Error fetching game details.');
+        }
+      } else {
+        throw new Error('Network error. Please try again.');
+      }
+    });
+};

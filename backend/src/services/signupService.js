@@ -5,6 +5,25 @@ const GameStatus = require('../constants/gameStatus')
 const PlayerRole = require('../constants/playerRole')
 const Team = require('../constants/team')
 
+async function fetchSignUpsWithPlayerNames(signUps) {
+  return Promise.all(
+    signUps.map(async (signUp) => {
+      try {
+        const player = await PlayerService.getPlayerById(signUp.PlayerId);
+        return {
+          ...signUp,
+          PlayerName: player.Name,
+        };
+      } catch (error) {
+        return {
+          ...signUp,
+          PlayerName: 'Unknown', // Defaulting to 'Unknown'
+        };
+      }
+    })
+  );
+}
+
 const signUpService = {
   async addSignUp (gameId, playerName) {
     const gameInfo = await GameService.getGameById(gameId);
@@ -74,37 +93,80 @@ const signUpService = {
     }
   },
 
-  async getUpcomingGameWithSignups () {
-    const upcomingGame = await GameService.findUpcomingGame()
+  async getUpcomingGameWithSignups() {
+    const upcomingGame = await GameService.findUpcomingGame();
     if (!upcomingGame) {
       return { game: null, signUps: [] };
     }
-    const signUps = await this.getSignUpsForGame(upcomingGame.GameId)
-
-    // Fetch player details for each sign-up. Consider performance improvement here
-    const signUpsWithPlayerNames = await Promise.all(
-      signUps.map(async signUp => {
-        try {
-          const player = await PlayerService.getPlayerById(signUp.PlayerId)
-          return {
-            ...signUp,
-            PlayerName: player.Name
-          }
-        } catch (error) {
-          // Handling the case where player details couldn't be fetched
-          return {
-            ...signUp,
-            PlayerName: 'Unknown' // Defaulting to 'Unknown'
-          }
-        }
-      })
-    )
+    const signUps = await this.getSignUpsForGame(upcomingGame.GameId);
+    const signUpsWithPlayerNames = await fetchSignUpsWithPlayerNames(signUps);
 
     return {
       game: upcomingGame,
-      signUps: signUpsWithPlayerNames
-    }
+      signUps: signUpsWithPlayerNames,
+    };
   },
+
+  // async getUpcomingGameWithSignups () {
+  //   const upcomingGame = await GameService.findUpcomingGame()
+  //   if (!upcomingGame) {
+  //     return { game: null, signUps: [] };
+  //   }
+  //   const signUps = await this.getSignUpsForGame(upcomingGame.GameId)
+
+  //   // Fetch player details for each sign-up. Consider performance improvement here
+  //   const signUpsWithPlayerNames = await Promise.all(
+  //     signUps.map(async signUp => {
+  //       try {
+  //         const player = await PlayerService.getPlayerById(signUp.PlayerId)
+  //         return {
+  //           ...signUp,
+  //           PlayerName: player.Name
+  //         }
+  //       } catch (error) {
+  //         // Handling the case where player details couldn't be fetched
+  //         return {
+  //           ...signUp,
+  //           PlayerName: 'Unknown' // Defaulting to 'Unknown'
+  //         }
+  //       }
+  //     })
+  //   )
+
+  //   return {
+  //     game: upcomingGame,
+  //     signUps: signUpsWithPlayerNames
+  //   }
+  // },
+
+  async getSignupsWithPlayerNames(gameId) {
+    const signUps = await signupModel.getSignUpsForGame(gameId);
+    return fetchSignUpsWithPlayerNames(signUps);
+  },
+
+  // async getSignupsWithPlayerNames(gameId) {
+  //   const signUps = await signupModel.getSignUpsForGame(gameId);
+  
+  //   // Fetch player details for each sign-up
+  //   const signUpsWithPlayerNames = await Promise.all(
+  //     signUps.map(async (signUp) => {
+  //       try {
+  //         const player = await PlayerService.getPlayerById(signUp.PlayerId);
+  //         return {
+  //           ...signUp,
+  //           PlayerName: player.Name 
+  //         };
+  //       } catch (error) {
+  //         return {
+  //           ...signUp,
+  //           PlayerName: 'Unknown' // Defaulting to 'Unknown'
+  //         };
+  //       }
+  //     })
+  //   );
+  
+  //   return signUpsWithPlayerNames;
+  // },
 
   async updateSignUpPaymentStatus (gameId, playerId, paid) {
     try {

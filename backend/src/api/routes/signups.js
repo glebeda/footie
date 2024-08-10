@@ -39,7 +39,7 @@ router.get('/upcoming', async (req, res) => {
 router.get('/:gameId', async (req, res) => {
   const { gameId } = req.params
   try {
-    const signUps = await signupModel.getSignUpsForGame(gameId)
+    const signUps = await await signupService.getSignupsWithPlayerNames(gameId)
     res.json(signUps)
   } catch (error) {
     console.error('Failed to retrieve sign-ups:', error)
