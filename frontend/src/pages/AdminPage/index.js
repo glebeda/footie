@@ -15,9 +15,11 @@ import { updateMultiplePlayersTeams } from '../../api/signupService'
 import { useGameDetails } from '../../hooks/useGameDetails'
 import { setGameNotFound } from '../../redux/slices/signupSlice';
 import PlayerListWithTeamSelection from '../../components/PlayerListWithTeamSelection'
+import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
   const { players, gameDetails, isLoadingGameDetails } = useSelector(state => state.signup);
   const [gameDate, setGameDate] = useState(getNextGameTime())
   const [location, setLocation] = useState('Goals Chingford')
@@ -26,6 +28,7 @@ const AdminPage = () => {
   const [isCancelling, setIsCancelling] = useState(false)
   const [teamAssignments, setTeamAssignments] = useState({})
   const { fetchAndSetGameDetails } = useGameDetails();
+  const [isIPhone, setIsIPhone] = useState(false); 
 
   useGameDetails();
 
@@ -40,6 +43,8 @@ const AdminPage = () => {
         initialAssignments[player.playerId] = player.team || ''; // Use an empty string if no team is assigned
       });
       setTeamAssignments(initialAssignments);
+      const isIPhoneUser = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+      setIsIPhone(isIPhoneUser);
     }
   }, [gameDetails, players]);
 
@@ -102,8 +107,13 @@ const AdminPage = () => {
   const handleSaveAndCopy = async () => {
     try {
       await handleSaveAssignments();
-      await handleCopyTeams();
-      alert('Teams saved and copied to clipboard');
+      if (!isIPhone) {
+        await handleCopyTeams();
+        alert('Teams saved and copied to clipboard');
+      } else {
+        alert('Teams saved successfully'); 
+      }
+      navigate('/'); 
     } catch (error) {
       console.error('Error saving and copying teams:', error);
       alert('Failed to save and copy teams. Please try again.');
@@ -186,7 +196,7 @@ const AdminPage = () => {
               disabled={!allTeamsAssigned}
               color='primary'
               style={{ marginLeft: 'auto'}}>
-              Save and Copy Teams
+              {isIPhone ? 'Save Teams' : 'Save and Copy Teams'}
             </PrimaryButton>
           </div>
         </>
