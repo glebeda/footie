@@ -62,8 +62,29 @@ const findPlayerByName = async (name) => {
   }
 }
 
+const getPlayersByIds = async (playerIds) => {
+  const keys = playerIds.map((id) => ({ PlayerId: id }));
+
+  const params = {
+    RequestItems: {
+      [TABLE_NAME]: {
+        Keys: keys,
+      },
+    },
+  };
+
+  try {
+    const data = await dynamoDb.batchGet(params).promise();
+    return data.Responses[TABLE_NAME];
+  } catch (error) {
+    console.error('Error batch fetching players:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   createPlayer,
   getPlayerById,
   findPlayerByName,
+  getPlayersByIds
 };
