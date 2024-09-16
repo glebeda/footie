@@ -25,6 +25,16 @@ const PlayerService = {
         }
     },
 
+    async getPlayersByIds(playerIds) {
+        try {
+          const players = await playerModel.getPlayersByIds(playerIds);
+          return players;
+        } catch (error) {
+          console.error('Error fetching players by IDs:', error);
+          throw error;
+        }
+    },
+
 };
 
 module.exports = PlayerService;

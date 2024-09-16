@@ -26,10 +26,12 @@ app.use(camelCaseMiddleware);
 const gamesRoutes = require('./src/api/routes/games');
 const playerRoutes = require('./src/api/routes/players');
 const signupRoutes = require('./src/api/routes/signups'); 
+const attendanceRoutes = require('./src/api/routes/attendance');
 
 app.use('/games', gamesRoutes);
 app.use('/players', playerRoutes);
 app.use('/signups', signupRoutes);
+app.use('/attendance', attendanceRoutes);
 scheduleGameStatusUpdate();
 
 app.get('/health', (req, res) => {

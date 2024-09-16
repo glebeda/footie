@@ -128,6 +128,30 @@ const findUpcomingGame = async () => {
   }
 };
 
+const getGamesByDateRange = async (startDate, endDate, status = GameStatus.PLAYED) => {
+  const params = {
+    TableName: TABLE_NAME,
+    FilterExpression: '#date BETWEEN :startDate AND :endDate AND #status = :status',
+    ExpressionAttributeNames: {
+      '#date': 'Date',
+      '#status': 'Status',
+    },
+    ExpressionAttributeValues: {
+      ':startDate': startDate,
+      ':endDate': endDate,
+      ':status': status,
+    },
+  };
+
+  try {
+    const data = await dynamoDb.scan(params).promise();
+    return data.Items;
+  } catch (error) {
+    console.error('Error retrieving games by date range and status:', error);
+    throw new Error('Error retrieving games by date range and status');
+  }
+};
+
 module.exports = {
   createGame,
   getGameById,
@@ -135,4 +159,5 @@ module.exports = {
   updateGameStatus,
   deleteGame,
   findUpcomingGame,
+  getGamesByDateRange,
 };

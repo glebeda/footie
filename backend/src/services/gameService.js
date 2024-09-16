@@ -1,4 +1,5 @@
 const Game = require('../models/gameModel')
+const GameStatus = require('../constants/gameStatus');
 
 const gameService = {
   async getGameById (gameId) {
@@ -52,7 +53,17 @@ const gameService = {
       console.error(`Error in gameService.createGameIfNoUpcomingExists:`, error)
       throw error
     }
-  }
+  },
+
+  async getGamesByDateRange(startDate, endDate, status = GameStatus.PLAYED) {
+    try {
+      const games = await Game.getGamesByDateRange(startDate, endDate, status);
+      return games;
+    } catch (error) {
+      console.error('Error retrieving games by date range and status:', error);
+      throw error;
+    }
+  },
 }
 
 module.exports = gameService
