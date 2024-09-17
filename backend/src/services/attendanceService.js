@@ -62,7 +62,7 @@ const attendanceService = {
   aggregateAttendance(signUps) {
     const attendanceMap = {};
     for (const signUp of signUps) {
-      if (!signUp.Role || signUp.Role !== PlayerRole.MAIN) {
+      if (signUp.Role === PlayerRole.SUBSTITUTE) {
         continue;
       }
       const { PlayerId } = signUp;

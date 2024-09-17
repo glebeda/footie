@@ -110,10 +110,10 @@ describe('attendanceService', () => {
   });
 
   describe('aggregateAttendance', () => {
-    it('correctly aggregates attendance counts', () => {
+    it('correctly aggregates attendance counts, including sign-ups without Role as MAIN', () => {
         const signUps = [
-          { PlayerId: 'player1', Role: PlayerRole.MAIN },
-          { PlayerId: 'player2', Role: PlayerRole.MAIN },
+          { PlayerId: 'player1' }, 
+          { PlayerId: 'player2' },
           { PlayerId: 'player1', Role: PlayerRole.MAIN },
           { PlayerId: 'player3', Role: PlayerRole.SUBSTITUTE },
         ];
