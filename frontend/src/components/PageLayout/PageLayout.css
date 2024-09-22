@@ -1,0 +1,9 @@
+.page-container {
+    padding: 1rem;
+  }
+  
+  .page-container h1,
+  .page-container h4 {
+    text-align: center;
+  }
+  

@@ -24,7 +24,7 @@ const AttendanceTable = ({ data }) => {
             <TableRow>
               <TableCell className='fixed-width'>#</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell align='right'>Attendance Count</TableCell>
+              <TableCell align='right'>Games played</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

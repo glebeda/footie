@@ -10,12 +10,13 @@ import CancelGameButton from '../../components/CancelGameButton'
 import PrimaryButton from '../../components/PrimaryButton'
 import LoadingState from '../../components/LoadingState'
 import './AdminPage.css'
-import { TextField, Container, Typography } from '@mui/material'
+import { TextField, Typography } from '@mui/material'
 import { updateMultiplePlayersTeams } from '../../api/signupService'
 import { useGameDetails } from '../../hooks/useGameDetails'
 import { setGameNotFound } from '../../redux/slices/signupSlice';
 import PlayerListWithTeamSelection from '../../components/PlayerListWithTeamSelection'
 import { useNavigate } from 'react-router-dom';
+import PageLayout from '../../components/PageLayout';
 
 const AdminPage = () => {
   const dispatch = useDispatch();
@@ -127,7 +128,7 @@ const AdminPage = () => {
     .every((player) => teamAssignments[player.playerId] === 'LIGHTS' || teamAssignments[player.playerId] === 'DARKS');
 
   return (
-    <Container maxWidth='sm'>
+    <PageLayout>
       <Typography variant='h4' gutterBottom>
         Schedule next game
       </Typography>
@@ -201,7 +202,7 @@ const AdminPage = () => {
           </div>
         </>
       )}
-    </Container>
+    </PageLayout>
   )
 }
 

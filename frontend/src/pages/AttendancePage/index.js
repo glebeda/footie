@@ -4,20 +4,20 @@ import DateRangeSelector from '../../components/DateRangeSelector';
 import AttendanceTable from '../../components/AttendanceTable';
 import Spinner from '../../components/Spinner';
 import ErrorMessage from '../../components/ErrorMessage';
+import PageLayout from '../../components/PageLayout';
 import { Typography } from '@mui/material';
-import './AttendancePage.css'; 
+
+const dateRanges = {
+    '2023-24': { startDate: '2023-08-01', endDate: '2024-07-31' },
+    '2022-23': { startDate: '2022-08-01', endDate: '2023-07-31' },
+    'All Time': { startDate: '2022-01-01', endDate: '2024-12-31' },
+  };
 
 const AttendancePage = () => {
   const [dateRange, setDateRange] = useState('2023-24'); 
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const dateRanges = {
-    '2023-24': { startDate: '2023-08-01', endDate: '2024-07-31' },
-    '2022-23': { startDate: '2022-08-01', endDate: '2023-07-31' },
-    'All Time': { startDate: '2022-01-01', endDate: '2024-12-31' },
-  };
 
   useEffect(() => {
     const { startDate, endDate } = dateRanges[dateRange];
@@ -42,7 +42,7 @@ const AttendancePage = () => {
   };
 
   return (
-    <div className="attendance-page">
+    <PageLayout>
       <Typography variant='h4' component='h1' gutterBottom>
         Attendance
       </Typography>
@@ -58,7 +58,7 @@ const AttendancePage = () => {
       ) : (
         <AttendanceTable data={attendanceData} />
       )}
-    </div>
+    </PageLayout>
   );
 };
 
