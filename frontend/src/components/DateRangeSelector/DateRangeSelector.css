@@ -1,0 +1,12 @@
+
+.date-range-selector {
+    margin-bottom: 1rem;
+    min-width: 200px;
+  }
+  
+  @media (max-width: 600px) {
+    .date-range-selector {
+      width: 100%;
+    }
+  }
+  

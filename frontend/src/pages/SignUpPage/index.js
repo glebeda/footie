@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
-import { TextField, Container, Typography } from '@mui/material'
+import { TextField, Typography } from '@mui/material'
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrimaryButton from '../../components/PrimaryButton'
@@ -15,6 +15,7 @@ import { scrollToTop } from '../../utils/scrollUtils'
 import { addPlayer } from '../../redux/slices/signupSlice';
 import { formatDate } from '../../utils/dateUtils';
 import TeamPlayerList from '../../components/TeamPlayerList';
+import PageLayout from '../../components/PageLayout';
 import './SignUpPage.css'
 
 const SignUpPage = () => {
@@ -87,7 +88,7 @@ const SignUpPage = () => {
   const hasTeamAssignments = lightsPlayers.length > 0 || darksPlayers.length > 0;
 
   return (
-    <Container maxWidth='sm'>
+    <PageLayout>
     <Typography variant='h4' component='h1' gutterBottom className="game-title">
       Join the Next Game
     </Typography>
@@ -135,7 +136,7 @@ const SignUpPage = () => {
         hideAlert={hideAlert}
         signupOccurred={signupOccurred}
       />
-    </Container>
+    </PageLayout>
   )
 }
 
