@@ -6,7 +6,7 @@ const theme = createTheme({
       main: '#2ECC71', // Green
     },
     secondary: {
-      main: '#E74C3C', // Dark Grey
+      main: '#E74C3C', 
     },
     background: {
       default: '#F5F5F5', // Light Grey
