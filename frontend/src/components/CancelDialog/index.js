@@ -1,6 +1,11 @@
 import React from 'react';
-import DialogButton from '../DialogButton';
-import { Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Button,
+} from '@mui/material';
 
 const CancelDialog = ({ open, onConfirm, onCancel }) => (
   <Dialog
@@ -15,12 +20,12 @@ const CancelDialog = ({ open, onConfirm, onCancel }) => (
       </DialogContentText>
     </DialogContent>
     <DialogActions>
-      <DialogButton onClick={onCancel} variant="outlined">
+      <Button onClick={onCancel} variant="outlined" color="primary" sx={{ marginRight: 1 }}>
         No, Keep
-      </DialogButton>
-      <DialogButton onClick={onConfirm} variant="contained" color="primary">
+      </Button>
+      <Button onClick={onConfirm} variant="contained" color="error">
         Yes, Cancel
-      </DialogButton>
+      </Button>
     </DialogActions>
   </Dialog>
 );

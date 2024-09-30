@@ -4,10 +4,6 @@
     scroll-behavior: smooth;
   }
   
-  .team-selection-row {
-    background-color: #f5f5f5;
-  }
-  
   .radio-group {
     display: flex;
     justify-content: flex-end;

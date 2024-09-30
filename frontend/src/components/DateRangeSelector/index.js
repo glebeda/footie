@@ -2,9 +2,13 @@ import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import './DateRangeSelector.css';
 
-const DateRangeSelector = ({ dateRange, onChange, options }) => {
+const DateRangeSelector = ({ dateRange, onChange, options, fullWidth }) => {
   return (
-    <FormControl variant="outlined" className="date-range-selector">
+    <FormControl
+      variant="outlined"
+      className="date-range-selector"
+      fullWidth={fullWidth}
+    >
       <InputLabel id="date-range-label">Select Season</InputLabel>
       <Select
         labelId="date-range-label"
