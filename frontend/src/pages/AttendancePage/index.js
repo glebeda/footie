@@ -5,7 +5,7 @@ import AttendanceTable from '../../components/AttendanceTable';
 import Spinner from '../../components/Spinner';
 import ErrorMessage from '../../components/ErrorMessage';
 import PageLayout from '../../components/PageLayout';
-import { Typography } from '@mui/material';
+import { Typography, Box, useMediaQuery, useTheme } from '@mui/material';
 
 const dateRanges = {
     '2023-24': { startDate: '2023-08-01', endDate: '2024-07-31' },
@@ -18,6 +18,9 @@ const AttendancePage = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const { startDate, endDate } = dateRanges[dateRange];
@@ -46,18 +49,34 @@ const AttendancePage = () => {
       <Typography variant='h4' component='h1' gutterBottom>
         Attendance
       </Typography>
-      <DateRangeSelector
-        dateRange={dateRange}
-        onChange={handleDateRangeChange}
-        options={Object.keys(dateRanges)}
-      />
-      {loading ? (
-        <Spinner />
-      ) : error ? (
-        <ErrorMessage message={error} />
-      ) : (
-        <AttendanceTable data={attendanceData} />
-      )}
+
+      {/* Responsive Container */}
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: isMobile ? '100%' : '600px', // Adjust '600px' to your table's width if necessary
+          margin: '0 auto',
+        }}
+      >
+        {/* DateRangeSelector */}
+        <Box sx={{ marginBottom: 2 }}>
+          <DateRangeSelector
+            dateRange={dateRange}
+            onChange={handleDateRangeChange}
+            options={Object.keys(dateRanges)}
+            fullWidth
+          />
+        </Box>
+
+        {/* Content */}
+        {loading ? (
+          <Spinner />
+        ) : error ? (
+          <ErrorMessage message={error} />
+        ) : (
+          <AttendanceTable data={attendanceData} />
+        )}
+      </Box>
     </PageLayout>
   );
 };

@@ -14,6 +14,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import Logo from '../../assets/images/logo192.png'; 
 
 const Navigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -59,7 +60,7 @@ const Navigation = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" style={{ backgroundColor: '#FFFFFF', color: '#2C3E50' }}>
         <Toolbar>
           {isMobile ? (
             <>
@@ -72,12 +73,14 @@ const Navigation = () => {
               >
                 <MenuIcon />
               </IconButton>
+              <img src={Logo} alt="Logo" style={{ height: '40px', marginRight: '16px' }} />
               <Typography variant="h6" component="div">
                 Footie
               </Typography>
             </>
           ) : (
             <>
+              <img src={Logo} alt="Logo" style={{ height: '40px', marginRight: '16px' }} />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Footie
               </Typography>
@@ -86,10 +89,10 @@ const Navigation = () => {
                   key={item.text}
                   to={item.path}
                   style={({ isActive }) => ({
-                    color: 'inherit',
+                    color: isActive ? theme.palette.primary.main : 'inherit',
                     textDecoration: 'none',
                     marginLeft: theme.spacing(2),
-                    borderBottom: isActive ? '2px solid white' : 'none',
+                    fontWeight: isActive ? 'bold' : 'normal',
                   })}
                 >
                   {item.text}
