@@ -6,8 +6,6 @@ import {
   IconButton,
   Drawer,
   List,
-  ListItem,
-  ListItemText,
   useMediaQuery,
   Box,
 } from '@mui/material';
@@ -15,6 +13,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import Logo from '../../assets/images/logo192.png'; 
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import DrawerMenuItem from '../DrawerMenuItem';
 
 const Navigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -26,9 +28,9 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { text: 'Sign Up', path: '/' },
-    { text: 'Attendance', path: '/attendance' },
-    { text: 'Admin', path: '/admin' },
+    { text: 'Sign Up', path: '/', icon: <HowToRegIcon /> },
+    { text: 'Attendance', path: '/attendance', icon: <EventAvailableIcon /> },
+    { text: 'Admin', path: '/admin', icon: <AdminPanelSettingsIcon /> },
   ];
 
   const drawer = (
@@ -38,22 +40,14 @@ const Navigation = () => {
       </Typography>
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding onClick={handleDrawerToggle}>
-            <ListItemText>
-              <NavLink
-                to={item.path}
-                style={({ isActive }) => ({
-                  display: 'block',
-                  padding: theme.spacing(1, 2),
-                  textDecoration: 'none',
-                  color: isActive ? theme.palette.primary.main : 'inherit',
-                })}
-              >
-                {item.text}
-              </NavLink>
-            </ListItemText>
-          </ListItem>
-        ))}
+            <DrawerMenuItem
+                key={item.text}
+                text={item.text}
+                path={item.path}
+                icon={item.icon}
+                onClick={handleDrawerToggle}
+            />
+      ))} 
       </List>
     </Box>
   );
