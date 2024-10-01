@@ -49,8 +49,6 @@ const nameMapping = {
     'Patrick': 'Patrick',
     'Patrick ': 'Patrick', // Trailing space
 
-    '123': 'Valera',
-
   };
   
   module.exports = nameMapping;
