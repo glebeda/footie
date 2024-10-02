@@ -14,7 +14,7 @@ const dateRanges = {
   };
 
 const AttendancePage = () => {
-  const [dateRange, setDateRange] = useState('All Time'); 
+  const [dateRange, setDateRange] = useState('2024-25'); 
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
