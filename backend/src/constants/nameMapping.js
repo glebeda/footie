@@ -21,6 +21,7 @@ const nameMapping = {
     'Tom Odon': 'Tom',
     "Tomas O'Donoghue": 'Tom',
     'Tommy lad': 'Tom',
+    'Tommy': 'Tom',
   
     'Colm': 'Colm',
     'Colm the Hero': 'Colm',
