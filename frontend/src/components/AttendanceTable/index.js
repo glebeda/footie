@@ -29,7 +29,7 @@ const AttendanceTable = ({ data }) => {
           </TableHead>
           <TableBody>
             {data.map((player, index) => (
-              <TableRow key={player.playerId}>
+              <TableRow key={player.playerName}>
                 <TableCell className='fixed-width' component='th' scope='row'>
                   {index + 1}
                 </TableCell>
