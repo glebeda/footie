@@ -21,6 +21,7 @@ const DrawerMenuItem = ({ text, path, icon, onClick }) => {
           '&.active': {
             backgroundColor: theme.palette.action.selected,
             color: theme.palette.primary.main,
+            borderLeft: `4px solid ${theme.palette.primary.main}`,
             '& .MuiListItemText-root': {
               fontWeight: 'bold',
             },

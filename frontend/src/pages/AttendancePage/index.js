@@ -9,7 +9,8 @@ import { Typography, Box, useMediaQuery, useTheme } from '@mui/material';
 
 const dateRanges = {
     '2023-24': { startDate: '2023-08-01', endDate: '2024-07-31' },
-    'All Time': { startDate: '2022-01-01', endDate: '2024-12-31' },
+    '2024-25': { startDate: '2024-08-01', endDate: '2025-07-31' },
+    'All Time': { startDate: '2022-01-01', endDate: '2028-12-31' },
   };
 
 const AttendancePage = () => {

@@ -87,6 +87,10 @@ const Navigation = () => {
                     textDecoration: 'none',
                     marginLeft: theme.spacing(2),
                     fontWeight: isActive ? 'bold' : 'normal',
+                    borderBottom: isActive
+                      ? `4px solid ${theme.palette.primary.main}`
+                      : '4px solid transparent', 
+                    paddingBottom: '4px', 
                   })}
                 >
                   {item.text}
