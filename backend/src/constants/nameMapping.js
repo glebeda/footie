@@ -7,6 +7,7 @@ const nameMapping = {
   
     'Kunal': 'Kunal',
     'Kunal ': 'Kunal', // Trailing space
+    'Kun Aguero': 'Kunal',
   
     'Rich': 'Rich',
     'Rich ': 'Rich',
@@ -19,6 +20,7 @@ const nameMapping = {
     'Tomas': 'Tom',
     'Tom Odon': 'Tom',
     "Tomas O'Donoghue": 'Tom',
+    'Tommy lad': 'Tom',
   
     'Colm': 'Colm',
     'Colm the Hero': 'Colm',
