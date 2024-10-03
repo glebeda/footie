@@ -43,6 +43,7 @@ const nameMapping = {
   
     'James Booker': 'James Booker',
     'James B': 'James Booker',
+    'James': 'James Booker',
   
     'David': 'David',
     'David C': 'David',
