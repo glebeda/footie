@@ -11,20 +11,37 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
+import { useTheme, styled } from '@mui/material/styles';
 import Logo from '../../assets/images/logo192.png'; 
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import DrawerMenuItem from '../DrawerMenuItem';
+import LoginButton from '../LoginButton';
+import LogoutButton from '../LogoutButton';
+import { Auth } from 'aws-amplify';
+import SignInDialog from '../SignInDialog'; 
 
-const Navigation = () => {
+const Navigation = ({ user }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false); 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogin = () => {
+    setLoginModalOpen(true);
+  };
+
+  const handleCloseLoginModal = () => {
+    setLoginModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    Auth.signOut();
   };
 
   const navItems = [
@@ -33,6 +50,29 @@ const Navigation = () => {
     { text: 'Admin', path: '/admin', icon: <AdminPanelSettingsIcon /> },
   ];
 
+  const NavItemLink = styled(NavLink)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    height: '40px',
+    padding: '8px 16px',
+    marginLeft: theme.spacing(2),
+    color: 'inherit',
+    textDecoration: 'none',
+    fontWeight: 'normal',
+    fontSize: '16px',
+    lineHeight: '24px',
+    borderBottom: '4px solid transparent',
+    cursor: 'pointer',
+    '&.active': {
+      color: theme.palette.primary.main,
+      fontWeight: 'bold',
+      borderBottom: `4px solid ${theme.palette.primary.main}`,
+    },
+    '&:hover': {
+      textDecoration: 'none',
+    },
+  }));
+
   const drawer = (
     <Box sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -40,14 +80,29 @@ const Navigation = () => {
       </Typography>
       <List>
         {navItems.map((item) => (
-            <DrawerMenuItem
-                key={item.text}
-                text={item.text}
-                path={item.path}
-                icon={item.icon}
-                onClick={handleDrawerToggle}
-            />
-      ))} 
+          <DrawerMenuItem
+            key={item.text}
+            text={item.text}
+            path={item.path}
+            icon={item.icon}
+            onClick={handleDrawerToggle}
+          />
+        ))}
+        {!user ? (
+          <Box sx={{ mt: 1 }}>
+            <LoginButton onClick={() => {
+              handleDrawerToggle();
+              handleLogin();
+            }} drawerMode={true} />
+            </Box>
+        ) : (
+          <Box sx={{ mt: 1 }}>
+            <LogoutButton onClick={() => {
+              handleDrawerToggle();
+              handleLogout();
+            }} drawerMode={true} />
+          </Box>
+        )}
       </List>
     </Box>
   );
@@ -79,23 +134,26 @@ const Navigation = () => {
                 Footie
               </Typography>
               {navItems.map((item) => (
-                <NavLink
+                <NavItemLink
                   key={item.text}
                   to={item.path}
-                  style={({ isActive }) => ({
-                    color: isActive ? theme.palette.primary.main : 'inherit',
-                    textDecoration: 'none',
-                    marginLeft: theme.spacing(2),
-                    fontWeight: isActive ? 'bold' : 'normal',
-                    borderBottom: isActive
-                      ? `4px solid ${theme.palette.primary.main}`
-                      : '4px solid transparent', 
-                    paddingBottom: '4px', 
-                  })}
+                  exact
                 >
                   {item.text}
-                </NavLink>
+                </NavItemLink>
               ))}
+              {user ? (
+                <>
+                  <Typography variant="body1" sx={{ marginLeft: theme.spacing(2) }}>
+                    Hello, {user.attributes?.name || user.username}
+                  </Typography>
+                  <LogoutButton color="inherit" onClick={handleLogout}>
+                    Logout
+                  </LogoutButton>
+                </>
+              ) : (
+                <LoginButton onClick={handleLogin} />
+              )}
             </>
           )}
         </Toolbar>
@@ -107,7 +165,7 @@ const Navigation = () => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, 
+            keepMounted: true,
           }}
           sx={{
             display: { xs: 'block', md: 'none' },
@@ -117,6 +175,7 @@ const Navigation = () => {
           {drawer}
         </Drawer>
       </nav>
+      <SignInDialog open={loginModalOpen} onClose={handleCloseLoginModal} />
     </>
   );
 };
