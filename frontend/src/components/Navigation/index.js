@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -23,10 +23,29 @@ import { Auth } from 'aws-amplify';
 import SignInDialog from '../SignInDialog'; 
 
 const Navigation = ({ user }) => {
+  const [userWithAttributes, setUserWithAttributes] = useState(user);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false); 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  useEffect(() => {
+    const fetchUserAttributes = async () => {
+      if (user) {
+        try {
+          const idToken = user.signInUserSession.idToken;
+          const attributes = idToken.payload;
+
+          setUserWithAttributes({ ...user, attributes });
+        } catch (err) {
+          console.log('Error extracting user attributes:', err);
+          setUserWithAttributes(user);
+        }
+      }
+    };
+
+    fetchUserAttributes();
+  }, [user]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -75,9 +94,15 @@ const Navigation = ({ user }) => {
 
   const drawer = (
     <Box sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Footie
-      </Typography>
+      {userWithAttributes ? (
+        <Typography variant="h6" sx={{ my: 2 }}>
+          Hi, {userWithAttributes.attributes?.given_name || userWithAttributes.attributes?.name || userWithAttributes.username}
+        </Typography>
+      ) : (
+        <Typography variant="h6" sx={{ my: 2 }}>
+          Footie
+        </Typography>
+      )}
       <List>
         {navItems.map((item) => (
           <DrawerMenuItem
@@ -144,9 +169,6 @@ const Navigation = ({ user }) => {
               ))}
               {user ? (
                 <>
-                  <Typography variant="body1" sx={{ marginLeft: theme.spacing(2) }}>
-                    Hello, {user.attributes?.name || user.username}
-                  </Typography>
                   <LogoutButton color="inherit" onClick={handleLogout}>
                     Logout
                   </LogoutButton>
