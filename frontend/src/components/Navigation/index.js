@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -19,10 +19,11 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import DrawerMenuItem from '../DrawerMenuItem';
 import LoginButton from '../LoginButton';
 import LogoutButton from '../LogoutButton';
-import { Auth } from 'aws-amplify';
 import SignInDialog from '../SignInDialog'; 
+import { AuthContext } from '../../contexts/AuthContext';
 
-const Navigation = ({ user }) => {
+const Navigation = () => {
+  const { user, signOut } = useContext(AuthContext);
   const [userWithAttributes, setUserWithAttributes] = useState(user);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false); 
@@ -57,10 +58,6 @@ const Navigation = ({ user }) => {
 
   const handleCloseLoginModal = () => {
     setLoginModalOpen(false);
-  };
-
-  const handleLogout = () => {
-    Auth.signOut();
   };
 
   const navItems = [
@@ -122,10 +119,13 @@ const Navigation = ({ user }) => {
             </Box>
         ) : (
           <Box sx={{ mt: 1 }}>
-            <LogoutButton onClick={() => {
-              handleDrawerToggle();
-              handleLogout();
-            }} drawerMode={true} />
+            <LogoutButton
+              onClick={() => {
+                handleDrawerToggle();
+                signOut();
+            }}
+            drawerMode={true}
+            />
           </Box>
         )}
       </List>
@@ -162,14 +162,13 @@ const Navigation = ({ user }) => {
                 <NavItemLink
                   key={item.text}
                   to={item.path}
-                  exact
                 >
                   {item.text}
                 </NavItemLink>
               ))}
               {user ? (
                 <>
-                  <LogoutButton color="inherit" onClick={handleLogout}>
+                  <LogoutButton color="inherit" onClick={signOut}>
                     Logout
                   </LogoutButton>
                 </>
