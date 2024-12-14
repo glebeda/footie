@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { TextField, Typography } from '@mui/material'
@@ -16,11 +16,13 @@ import { addPlayer } from '../../redux/slices/signupSlice';
 import { formatDate } from '../../utils/dateUtils';
 import TeamPlayerList from '../../components/TeamPlayerList';
 import PageLayout from '../../components/PageLayout';
+import { AuthContext } from '../../contexts/AuthContext';
 import './SignUpPage.css'
 
 const SignUpPage = () => {
   const dispatch = useDispatch();
   const { players, gameDetails, isLoadingGameDetails } = useSelector(state => state.signup);
+  const { user } = useContext(AuthContext);
   const [playerName, setPlayerName] = useState('')
   const [signupOccurred, setSignupOccurred] = useState(false);
   const [isHighlighting, setIsHighlighting] = useState(null)
@@ -30,6 +32,25 @@ const SignUpPage = () => {
     severity: 'error',
   });
   useGameDetails()
+
+  const getUserName = (user) => {
+    if (user && user.attributes) {
+      return (
+        user.attributes.name ||
+        `${user.attributes.given_name || ''} ${user.attributes.family_name || ''}`.trim()
+      );
+    } 
+    return '';
+  };
+
+  useEffect(() => {
+    const name = getUserName(user);
+    if (name) {
+      setPlayerName(name);
+    } else {
+      setPlayerName('');
+    }
+  }, [user]);
   
   const showAlert = (message, severity = 'error') => {
     setAlertInfo({ open: true, message, severity });
@@ -44,22 +65,22 @@ const SignUpPage = () => {
     setPlayerName(event.target.value)
   }
 
-  const handleSignUp = async event => {
-    event.preventDefault()
+  const handleSignUp = async (event) => {
+    event.preventDefault();
     try {
       const signupDetails = await signUpPlayer({
         gameId: gameDetails.gameId,
-        playerName
-      })
-      setPlayerName('')
+        playerName,
+      });
+      setPlayerName(getUserName(user));
       setIsHighlighting(signupDetails.playerId);
       setTimeout(() => setIsHighlighting(null), 2000);
       setSignupOccurred(true);
       const newPlayer = {
         name: playerName,
-        playerId: signupDetails.playerId, 
+        playerId: signupDetails.playerId,
         gameId: gameDetails.gameId,
-        paid: false, 
+        paid: false,
       };
       dispatch(addPlayer(newPlayer));
       hideAlert();
