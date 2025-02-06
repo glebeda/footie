@@ -4,19 +4,19 @@ import disappointedSoccerPlayer from '../../assets/images/empty_state.png';
 import PageLayout from '../../components/PageLayout';
 import './EmptyState.css';
 
-const EmptyState = () => {
+const EmptyState = ({ message = "Oi, no match is on the cards just yet" }) => {
     return (
       <PageLayout>
         <Container maxWidth='sm' className="container">
           <Typography variant='h4' component='h1' gutterBottom>
-            Oi, no match is on the cards just yet
+            {message}
           </Typography>
           <Box className="imageContainer">
             <img src={disappointedSoccerPlayer} alt="Empty State" className="image" />
           </Box>
         </Container>
       </PageLayout>
-      );
+    );
 };
 
 export default EmptyState;

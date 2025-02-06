@@ -13,7 +13,7 @@ import { useGameDetails } from '../../hooks/useGameDetails'
 import { signUpPlayer } from '../../api/signupService'
 import { scrollToTop } from '../../utils/scrollUtils'
 import { addPlayer } from '../../redux/slices/signupSlice';
-import { formatDate } from '../../utils/dateUtils';
+import { formatDate } from '../../utils/dateUtils/index';
 import TeamPlayerList from '../../components/TeamPlayerList';
 import PageLayout from '../../components/PageLayout';
 import './SignUpPage.css'

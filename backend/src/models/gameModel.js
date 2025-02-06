@@ -137,15 +137,15 @@ const getGamesByDateRange = async (startDate, endDate, status = GameStatus.PLAYE
       '#status': 'Status',
     },
     ExpressionAttributeValues: {
-      ':startDate': startDate,
-      ':endDate': endDate,
+      ':startDate': startDate.toISOString(),
+      ':endDate': endDate.toISOString(),
       ':status': status,
     },
   };
 
   try {
     const data = await dynamoDb.scan(params).promise();
-    return data.Items;
+    return data.Items.sort((a, b) => new Date(b.Date) - new Date(a.Date));
   } catch (error) {
     console.error('Error retrieving games by date range and status:', error);
     throw new Error('Error retrieving games by date range and status');

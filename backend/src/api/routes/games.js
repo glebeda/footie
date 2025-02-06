@@ -34,6 +34,19 @@ router.get('/upcoming', async (req, res) => {
   }
 });
 
+// GET /games/past - Get past games
+router.get('/past', async (req, res) => {
+  try {
+    const pastGames = await GameService.getPastGames();
+    if (!pastGames || pastGames.length === 0) {
+      return res.status(404).json({ error: 'Sorry lad, no past games found' });
+    }
+    res.json(pastGames);
+  } catch (error) {
+    console.error('Error fetching past games:', error);
+    res.status(500).json({ error: 'Error fetching past games' });
+  }
+});
 
 // GET /games/:id - Get a game by ID
 router.get('/:id', async (req, res) => {

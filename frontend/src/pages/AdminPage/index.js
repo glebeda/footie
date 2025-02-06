@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { getNextGameTime } from '../../utils/dateUtils'
+import { getNextGameTime } from '../../utils/dateUtils/index'
 import formatTeamDataForClipboard from '../../utils/stringUtils';
 import {
   createGame,

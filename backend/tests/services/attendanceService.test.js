@@ -38,7 +38,14 @@ describe('attendanceService', () => {
       ];
 
       // Mock implementations
-      GameService.getGamesByDateRange.mockResolvedValue(mockGames);
+      GameService.getGamesByDateRange.mockImplementation((startDate, endDate, status) => {
+        // Verify that we're receiving Date objects
+        expect(startDate).toBeInstanceOf(Date);
+        expect(endDate).toBeInstanceOf(Date);
+        expect(startDate.toISOString()).toContain('2023-08-01');
+        expect(endDate.toISOString()).toContain('2024-05-31');
+        return Promise.resolve(mockGames);
+      });
 
       SignUpService.getSignUpsForGame.mockImplementation((gameId) => {
         return Promise.resolve(
@@ -58,11 +65,7 @@ describe('attendanceService', () => {
       );
 
       expect(result).toEqual(expectedAttendanceData);
-      expect(GameService.getGamesByDateRange).toHaveBeenCalledWith(
-        seasonStartDate,
-        seasonEndDate,
-        GameStatus.PLAYED
-      );
+      expect(GameService.getGamesByDateRange).toHaveBeenCalledTimes(1);
       expect(SignUpService.getSignUpsForGame).toHaveBeenCalledTimes(2);
       expect(PlayerService.getPlayersByIds).toHaveBeenCalledWith(['player1']);
     });
@@ -80,8 +83,8 @@ describe('attendanceService', () => {
 
       expect(result).toEqual([]);
       expect(GameService.getGamesByDateRange).toHaveBeenCalledWith(
-        seasonStartDate,
-        seasonEndDate,
+        expect.any(Date),
+        expect.any(Date),
         GameStatus.PLAYED
       );
       expect(SignUpService.getSignUpsForGame).not.toHaveBeenCalled();
@@ -100,8 +103,8 @@ describe('attendanceService', () => {
       ).rejects.toThrow('Database error');
 
       expect(GameService.getGamesByDateRange).toHaveBeenCalledWith(
-        seasonStartDate,
-        seasonEndDate,
+        expect.any(Date),
+        expect.any(Date),
         GameStatus.PLAYED
       );
       expect(SignUpService.getSignUpsForGame).not.toHaveBeenCalled();
@@ -159,6 +162,34 @@ describe('attendanceService', () => {
       const result = attendanceService.convertAndSortAttendance(attendanceMap);
 
       expect(result).toEqual(expectedAttendanceArray);
+    });
+  });
+
+  describe('getGamesInSeason', () => {
+    it('converts string dates to Date objects before calling GameService', async () => {
+      const seasonStartDate = '2023-08-01';
+      const seasonEndDate = '2024-05-31';
+
+      GameService.getGamesByDateRange.mockImplementation((startDate, endDate, status) => {
+        expect(startDate).toBeInstanceOf(Date);
+        expect(endDate).toBeInstanceOf(Date);
+        expect(startDate.toISOString()).toContain('2023-08-01');
+        expect(endDate.toISOString()).toContain('2024-05-31');
+        return Promise.resolve([]);
+      });
+
+      await attendanceService.getGamesInSeason(seasonStartDate, seasonEndDate);
+
+      expect(GameService.getGamesByDateRange).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles invalid date strings', async () => {
+      const seasonStartDate = 'invalid-date';
+      const seasonEndDate = '2024-05-31';
+
+      await expect(
+        attendanceService.getGamesInSeason(seasonStartDate, seasonEndDate)
+      ).rejects.toThrow();
     });
   });
 });
