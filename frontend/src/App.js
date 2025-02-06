@@ -7,6 +7,7 @@ import AdminPage from './pages/AdminPage'
 import AttendancePage from './pages/AttendancePage';
 import { CssBaseline } from '@mui/material';
 import theme from './theme';
+import GameHistoryPage from './pages/GameHistoryPage';
 
 function App () {
   return (
@@ -18,6 +19,7 @@ function App () {
           <Route path='/' element={<SignUpPage />} />
           <Route path='/admin' element={<AdminPage />} />
           <Route path="/attendance" element={<AttendancePage />} />
+          <Route path="/history" element={<GameHistoryPage />} />
         </Routes>
       </Router>
     </ThemeProvider>

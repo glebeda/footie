@@ -54,9 +54,13 @@ const attendanceService = {
 
   async getGamesInSeason(seasonStartDate, seasonEndDate) {
     try {
+      // Convert string dates to Date objects
+      const startDate = new Date(seasonStartDate);
+      const endDate = new Date(seasonEndDate);
+
       const games = await GameService.getGamesByDateRange(
-        seasonStartDate,
-        seasonEndDate,
+        startDate,
+        endDate,
         GameStatus.PLAYED
       );
       return games;

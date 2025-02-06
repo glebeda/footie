@@ -56,6 +56,7 @@ describe('Navigation', () => {
     expect(within(appBar).getByText('Sign Up')).toBeInTheDocument();
     expect(within(appBar).getByText('Attendance')).toBeInTheDocument();
     expect(within(appBar).getByText('Admin')).toBeInTheDocument();
+    expect(within(appBar).getByText('Past Matches')).toBeInTheDocument();
 
     // Menu icon should not be present
     expect(screen.queryByLabelText('menu')).not.toBeInTheDocument();
@@ -94,6 +95,7 @@ describe('Navigation', () => {
     expect(screen.getByTestId('drawer-menu-item-Sign Up')).toBeInTheDocument();
     expect(screen.getByTestId('drawer-menu-item-Attendance')).toBeInTheDocument();
     expect(screen.getByTestId('drawer-menu-item-Admin')).toBeInTheDocument();
+    expect(screen.getByTestId('drawer-menu-item-Past Matches')).toBeInTheDocument();
 
     // Close the drawer by clicking a menu item
     fireEvent.click(screen.getByTestId('drawer-menu-item-Sign Up'));

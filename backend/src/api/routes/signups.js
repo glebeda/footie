@@ -136,4 +136,18 @@ router.patch('/:gameId/teams', async (req, res) => {
   }
 });
 
+router.get('/game/:gameId', async (req, res) => {
+  try {
+    const { gameId } = req.params;
+    const data = await signupService.getGameWithSignups(gameId);
+    if (!data.game) {
+      return res.status(404).json({ message: 'Game not found' });
+    }
+    res.json(data);
+  } catch (error) {
+    console.error(`Error fetching game with signups:`, error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router

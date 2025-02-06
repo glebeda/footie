@@ -17,6 +17,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import DrawerMenuItem from '../DrawerMenuItem';
+import HistoryIcon from '@mui/icons-material/History';
 
 const Navigation = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,6 +32,7 @@ const Navigation = () => {
     { text: 'Sign Up', path: '/', icon: <HowToRegIcon /> },
     { text: 'Attendance', path: '/attendance', icon: <EventAvailableIcon /> },
     { text: 'Admin', path: '/admin', icon: <AdminPanelSettingsIcon /> },
+    { text: 'Past Matches', path: '/history', icon: <HistoryIcon /> },
   ];
 
   const drawer = (

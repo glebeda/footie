@@ -13,8 +13,9 @@ const signUpService = {
     }
 
     const player = await PlayerService.ensureUniquePlayer(playerName);
+  
     const playerId = player.PlayerId;
-
+  
     const existingSignUp = await signupModel.checkSignUpExists(gameId, playerId);
     if (existingSignUp) {
       throw new Error('Player is already signed up for this game');
@@ -148,6 +149,37 @@ const signUpService = {
       console.error('Error updating multiple team assignments:', error);
       throw new Error('Unable to update multiple team assignments');
     }
+  },
+
+  async getGameWithSignups(gameId) {
+    const game = await GameService.getGameById(gameId);
+    if (!game) {
+      return { game: null, signUps: [] };
+    }
+    const signUps = await this.getSignUpsForGame(game.GameId);
+
+    // Fetch player details for each sign-up
+    const signUpsWithPlayerNames = await Promise.all(
+      signUps.map(async signUp => {
+        try {
+          const player = await PlayerService.getPlayerById(signUp.PlayerId);
+          return {
+            ...signUp,
+            PlayerName: player.Name
+          };
+        } catch (error) {
+          return {
+            ...signUp,
+            PlayerName: 'Unknown'
+          };
+        }
+      })
+    );
+
+    return {
+      game,
+      signUps: signUpsWithPlayerNames
+    };
   }
 }
 

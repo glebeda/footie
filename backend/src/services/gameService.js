@@ -64,6 +64,20 @@ const gameService = {
       throw error;
     }
   },
+
+  async getPastGames() {
+    try {
+      const games = await Game.getGamesByDateRange(
+        new Date(0), // From beginning of time
+        new Date(), // Until now
+        GameStatus.COMPLETED
+      );
+      return games;
+    } catch (error) {
+      console.error('Error retrieving past games:', error);
+      throw error;
+    }
+  },
 }
 
 module.exports = gameService
