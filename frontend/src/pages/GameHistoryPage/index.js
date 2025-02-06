@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
 import { getPastGames } from '../../api/gameService';
 import { getGameWithSignups } from '../../api/signupService';
@@ -11,19 +11,36 @@ import './GameHistoryPage.css';
 
 const GameHistoryPage = () => {
   const [pastGames, setPastGames] = useState([]);
+  const [selectedYear, setSelectedYear] = useState('');
   const [selectedGame, setSelectedGame] = useState('');
   const [currentGameDetails, setCurrentGameDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Get unique years from games
+  const availableYears = [...new Set(pastGames.map(game => 
+    new Date(game.date).getFullYear()
+  ))].sort((a, b) => b - a); // Sort years descending
 
   useEffect(() => {
     const fetchPastGames = async () => {
       try {
         const games = await getPastGames();
         setPastGames(games);
+        
+        // Set initial selections if games exist
         if (games.length > 0) {
-          setSelectedGame(games[0].gameId);
+          // Sort games by date descending to get the most recent first
+          const sortedGames = [...games].sort((a, b) => 
+            new Date(b.date) - new Date(a.date)
+          );
+          const mostRecentGame = sortedGames[0];
+          const mostRecentYear = new Date(mostRecentGame.date).getFullYear();
+          
+          setSelectedYear(mostRecentYear);
+          setSelectedGame(mostRecentGame.gameId);
         }
+        
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching past games:', error);
@@ -50,6 +67,23 @@ const GameHistoryPage = () => {
 
     fetchGameDetails();
   }, [selectedGame]);
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+    setSelectedGame(''); // Reset selected game when year changes
+    setCurrentGameDetails(null);
+  };
+
+  const handleGameChange = (event) => {
+    setSelectedGame(event.target.value);
+  };
+
+  // Move the games sorting logic outside the render for better performance
+  const sortedGamesForYear = useMemo(() => {
+    return pastGames
+      .filter(game => new Date(game.date).getFullYear() === selectedYear)
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [pastGames, selectedYear]);
 
   if (isLoading) {
     return <LoadingState />;
@@ -98,20 +132,38 @@ const GameHistoryPage = () => {
       </Typography>
 
       <FormControl fullWidth margin="normal">
-        <InputLabel id="game-select-label">Select Match</InputLabel>
+        <InputLabel id="year-select-label">Select Year</InputLabel>
         <Select
-          labelId="game-select-label"
-          value={selectedGame}
-          onChange={(e) => setSelectedGame(e.target.value)}
-          label="Select Match"
+          labelId="year-select-label"
+          value={selectedYear}
+          onChange={handleYearChange}
+          label="Select Year"
         >
-          {pastGames.map((game) => (
-            <MenuItem key={game.gameId} value={game.gameId}>
-              {formatDate(game.date)}
+          {availableYears.map((year) => (
+            <MenuItem key={year} value={year}>
+              {year}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
+
+      {selectedYear && (
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="game-select-label">Select Match</InputLabel>
+          <Select
+            labelId="game-select-label"
+            value={selectedGame}
+            onChange={handleGameChange}
+            label="Select Match"
+          >
+            {sortedGamesForYear.map((game) => (
+              <MenuItem key={game.gameId} value={game.gameId}>
+                {formatDate(game.date)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
 
       {currentGameDetails && (
         <div className="team-lists-container">
