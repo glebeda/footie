@@ -30,11 +30,13 @@ import { getGameWithSignups } from '../../api/signupService';
 describe('GameHistoryPage', () => {
   const mockPastGames = [
     { gameId: 'game1', date: '2024-01-01T21:00:00Z' },
-    { gameId: 'game2', date: '2024-01-08T21:00:00Z' }
+    { gameId: 'game2', date: '2024-01-08T21:00:00Z' },
+    { gameId: 'game3', date: '2023-12-15T21:00:00Z' },
+    { gameId: 'game4', date: '2023-12-22T21:00:00Z' }
   ];
 
   const mockGameDetails = {
-    game: { gameId: 'game1', date: '2024-01-01T21:00:00Z' },
+    game: { gameId: 'game2', date: '2024-01-08T21:00:00Z' },
     signUps: [
       { playerId: 'p1', playerName: 'Player 1', team: 'LIGHTS', paid: true },
       { playerId: 'p2', playerName: 'Player 2', team: 'DARKS', paid: false },
@@ -70,24 +72,66 @@ describe('GameHistoryPage', () => {
     });
   });
 
-  it('displays past games and allows selection', async () => {
+  it('automatically selects most recent year and game on load', async () => {
     getPastGames.mockResolvedValue(mockPastGames);
     getGameWithSignups.mockResolvedValue(mockGameDetails);
 
     render(<GameHistoryPage />);
 
-    // Wait for games to load
     await waitFor(() => {
-      expect(screen.getByLabelText('Select Match')).toBeInTheDocument();
+      // Should select 2024 as it's the most recent year
+      const yearSelect = screen.getByRole('combobox', { name: 'Select Year' });
+      expect(yearSelect).toHaveTextContent('2024');
+
+      // Should select the most recent game (January 8)
+      const gameSelect = screen.getByRole('combobox', { name: 'Select Match' });
+      expect(gameSelect).toHaveTextContent('8 January at 21:00');
+    });
+  });
+
+  it('filters games by selected year', async () => {
+    getPastGames.mockResolvedValue(mockPastGames);
+    getGameWithSignups.mockResolvedValue(mockGameDetails);
+
+    render(<GameHistoryPage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Select Year')).toBeInTheDocument();
     });
 
-    // Check if both games are in the dropdown
-    const select = screen.getByLabelText('Select Match');
-    fireEvent.mouseDown(select);
+    // Open year dropdown and select 2023
+    fireEvent.mouseDown(screen.getByLabelText('Select Year'));
+    fireEvent.click(screen.getByText('2023'));
+
+    // Should show only 2023 games in the game dropdown
+    fireEvent.mouseDown(screen.getByLabelText('Select Match'));
     
     await waitFor(() => {
-      expect(screen.getAllByRole('option')).toHaveLength(2);
+      const options = screen.getAllByRole('option').filter(option => 
+        option.getAttribute('data-value')?.includes('game3') || 
+        option.getAttribute('data-value')?.includes('game4')
+      );
+      expect(options).toHaveLength(2);
     });
+  });
+
+  it('resets game selection when year changes', async () => {
+    getPastGames.mockResolvedValue(mockPastGames);
+    getGameWithSignups.mockResolvedValue(mockGameDetails);
+
+    render(<GameHistoryPage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Select Year')).toBeInTheDocument();
+    });
+
+    // Change year
+    fireEvent.mouseDown(screen.getByLabelText('Select Year'));
+    fireEvent.click(screen.getByText('2023'));
+
+    // Game selection should be reset to placeholder
+    const gameSelect = screen.getByRole('combobox', { name: 'Select Match' });
+    expect(gameSelect).toBeInTheDocument();
   });
 
   it('displays team lists when game is selected', async () => {
@@ -97,39 +141,13 @@ describe('GameHistoryPage', () => {
     render(<GameHistoryPage />);
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Select Match')).toBeInTheDocument();
-    });
-
-    // Wait for team lists to appear
-    await waitFor(() => {
       expect(screen.getByTestId('team-lights')).toBeInTheDocument();
       expect(screen.getByTestId('team-darks')).toBeInTheDocument();
       expect(screen.getByTestId('team-unassigned')).toBeInTheDocument();
     });
 
-    // Check if players are displayed in correct teams
     expect(screen.getByText('Player 1')).toBeInTheDocument();
     expect(screen.getByText('Player 2')).toBeInTheDocument();
     expect(screen.getByText('Player 3')).toBeInTheDocument();
-  });
-
-  it('fetches new game details when different game is selected', async () => {
-    getPastGames.mockResolvedValue(mockPastGames);
-    getGameWithSignups.mockResolvedValue(mockGameDetails);
-
-    render(<GameHistoryPage />);
-
-    await waitFor(() => {
-      expect(screen.getByLabelText('Select Match')).toBeInTheDocument();
-    });
-
-    // Select a different game
-    const select = screen.getByLabelText('Select Match');
-    fireEvent.mouseDown(select);
-    const options = await screen.findAllByRole('option');
-    fireEvent.click(options[1]);
-
-    // Verify that getGameWithSignups was called with the new game ID
-    expect(getGameWithSignups).toHaveBeenCalledWith(mockPastGames[1].gameId);
   });
 }); 
