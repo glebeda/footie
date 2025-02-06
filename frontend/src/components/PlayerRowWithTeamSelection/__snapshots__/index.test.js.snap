@@ -4,7 +4,7 @@ exports[`PlayerRowWithTeamSelection matches the snapshot 1`] = `
 <DocumentFragment>
   1Player One
   <div
-    class="MuiFormGroup-root MuiFormGroup-row MuiRadioGroup-root MuiRadioGroup-row css-qfz70r-MuiFormGroup-root"
+    class="MuiFormGroup-root MuiFormGroup-row css-qfz70r-MuiFormGroup-root"
     role="radiogroup"
   >
     <label
