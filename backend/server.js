@@ -14,7 +14,11 @@ const camelCaseMiddleware = require('./src/middleware/camelCaseMiddleware');
 const cors = require('cors');
 const { scheduleGameStatusUpdate } = require('./src/services/scheduler');
 const app = express();
-const port = process.env.PORT || 3000;
+
+// Only schedule updates when running in a non-serverless environment
+if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV !== 'production') {
+  scheduleGameStatusUpdate();
+}
 
 app.use(cors({
   // React app
@@ -28,18 +32,22 @@ const playerRoutes = require('./src/api/routes/players');
 const signupRoutes = require('./src/api/routes/signups'); 
 const attendanceRoutes = require('./src/api/routes/attendance');
 
-app.use('/games', gamesRoutes);
-app.use('/players', playerRoutes);
-app.use('/signups', signupRoutes);
-app.use('/attendance', attendanceRoutes);
-scheduleGameStatusUpdate();
+app.use('/api/games', gamesRoutes);
+app.use('/api/players', playerRoutes);
+app.use('/api/signups', signupRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.status(200).send('OK');
 });
 
-app.listen(port, () => {
-  const environment = process.env.NODE_ENV || 'dev';
-  const host = environment === 'production' ? 'production URL' : `http://localhost:${port}`;
-  console.log(`Server running in ${environment} mode on ${host}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Server running in development mode on http://localhost:${port}`);
+  });
+}
+
+// Export for Vercel serverless functions
+module.exports = app;
