@@ -22,7 +22,9 @@ if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV !== 'product
 
 app.use(cors({
   // React app
-  origin: process.env.NODE_ENV === 'production' ? 'https://www.playfootie.net' : 'http://localhost:3001',
+  origin: process.env.NODE_ENV === 'production' 
+    ? (process.env.FRONTEND_URL || 'https://www.playfootie.net') 
+    : 'http://localhost:3001',
 }));
 app.use(express.json());
 app.use(camelCaseMiddleware);
