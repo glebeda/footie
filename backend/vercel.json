@@ -4,12 +4,20 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
+      "src": "/api/cron/(.*)",
+      "dest": "/api/cron/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/server.js"
     }
   ],
   "env": {
@@ -19,7 +27,7 @@
   "crons": [
     {
       "path": "/api/cron/update-game-status",
-      "schedule": "45 18 * * 6"
+      "schedule": "40 19 * * 6"
     }
   ]
 } 

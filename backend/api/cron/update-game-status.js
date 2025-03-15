@@ -3,6 +3,8 @@ const gameService = require('../../src/services/gameService');
 const GameStatus = require('../../src/constants/gameStatus');
 
 module.exports = async (req, res) => {
+  console.log('Cron endpoint called');
+  
   // Verify the request is coming from Vercel Cron
   const authHeader = req.headers.authorization;
   if (!authHeader || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
