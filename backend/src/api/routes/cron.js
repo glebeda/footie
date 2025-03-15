@@ -12,8 +12,8 @@ const verifyCronRequest = (req, res, next) => {
   next();
 };
 
-// Route to update game status
-router.post('/update-game-status', verifyCronRequest, async (req, res) => {
+// Route to update game status - using GET since Vercel cron jobs use GET by default
+router.get('/update-game-status', verifyCronRequest, async (req, res) => {
   console.log('Cron endpoint called for updating game status');
   
   try {
