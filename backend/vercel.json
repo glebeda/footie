@@ -19,7 +19,7 @@
   "crons": [
     {
       "path": "/api/cron/update-game-status",
-      "schedule": "50 22 * * 6"
+      "schedule": "30 23 * * 2"
     }
   ]
 } 
