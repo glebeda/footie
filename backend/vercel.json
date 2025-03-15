@@ -15,5 +15,11 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "regions": ["lhr1"]
+  "regions": ["lhr1"],
+  "crons": [
+    {
+      "path": "/api/cron/update-game-status",
+      "schedule": "45 18 * * 6"
+    }
+  ]
 } 

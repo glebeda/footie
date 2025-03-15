@@ -12,11 +12,12 @@ AWS.config.update({
 const express = require('express');
 const camelCaseMiddleware = require('./src/middleware/camelCaseMiddleware');
 const cors = require('cors');
-const { scheduleGameStatusUpdate } = require('./src/services/scheduler');
 const app = express();
 
-// Only schedule updates when running in a non-serverless environment
-if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV !== 'production') {
+// In development, use the scheduler
+// In production (Vercel), we use Vercel Cron Jobs instead
+if (process.env.NODE_ENV !== 'production') {
+  const { scheduleGameStatusUpdate } = require('./src/services/scheduler');
   scheduleGameStatusUpdate();
 }
 
