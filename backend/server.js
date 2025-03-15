@@ -34,11 +34,13 @@ const gamesRoutes = require('./src/api/routes/games');
 const playerRoutes = require('./src/api/routes/players');
 const signupRoutes = require('./src/api/routes/signups'); 
 const attendanceRoutes = require('./src/api/routes/attendance');
+const cronRoutes = require('./src/api/routes/cron');
 
 app.use('/api/games', gamesRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/signups', signupRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/cron', cronRoutes);
 
 app.get('/api/health', (req, res) => {
   res.status(200).send('OK');
