@@ -6,15 +6,13 @@ import Spinner from '../../components/Spinner';
 import ErrorMessage from '../../components/ErrorMessage';
 import PageLayout from '../../components/PageLayout';
 import { Typography, Box, useMediaQuery, useTheme } from '@mui/material';
+import { buildSeasonDateRanges } from './dateRanges';
 
-const dateRanges = {
-    '2023-24': { startDate: '2023-08-01', endDate: '2024-07-31' },
-    '2024-25': { startDate: '2024-08-01', endDate: '2025-07-31' },
-    'All Time': { startDate: '2022-01-01', endDate: '2028-12-31' },
-  };
+const dateRanges = buildSeasonDateRanges();
+const defaultDateRange = Object.keys(dateRanges)[0] || 'All Time';
 
 const AttendancePage = () => {
-  const [dateRange, setDateRange] = useState('2024-25'); 
+  const [dateRange, setDateRange] = useState(defaultDateRange); 
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

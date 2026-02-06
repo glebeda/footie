@@ -3,6 +3,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const { v4: uuidv4 } = require('uuid'); 
 
 const TABLE_NAME = 'Players';
+const MAX_BATCH_GET_KEYS = 100;
 
 const createPlayer = async (playerData) => {
   const PlayerId = uuidv4(); 
@@ -63,19 +64,35 @@ const findPlayerByName = async (name) => {
 }
 
 const getPlayersByIds = async (playerIds) => {
-  const keys = playerIds.map((id) => ({ PlayerId: id }));
-
-  const params = {
-    RequestItems: {
-      [TABLE_NAME]: {
-        Keys: keys,
-      },
-    },
-  };
-
   try {
-    const data = await dynamoDb.batchGet(params).promise();
-    return data.Responses[TABLE_NAME];
+    if (!Array.isArray(playerIds) || playerIds.length === 0) {
+      return [];
+    }
+
+    const uniquePlayerIds = [...new Set(playerIds)];
+    const allPlayers = [];
+
+    for (let index = 0; index < uniquePlayerIds.length; index += MAX_BATCH_GET_KEYS) {
+      let pendingKeys = uniquePlayerIds
+        .slice(index, index + MAX_BATCH_GET_KEYS)
+        .map((id) => ({ PlayerId: id }));
+
+      while (pendingKeys.length > 0) {
+        const params = {
+          RequestItems: {
+            [TABLE_NAME]: {
+              Keys: pendingKeys,
+            },
+          },
+        };
+
+        const data = await dynamoDb.batchGet(params).promise();
+        allPlayers.push(...(data.Responses?.[TABLE_NAME] || []));
+        pendingKeys = data.UnprocessedKeys?.[TABLE_NAME]?.Keys || [];
+      }
+    }
+
+    return allPlayers;
   } catch (error) {
     console.error('Error batch fetching players:', error);
     throw error;
