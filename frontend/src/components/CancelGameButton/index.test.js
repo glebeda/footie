@@ -5,31 +5,28 @@ import '@testing-library/jest-dom';
 
 describe('CancelGameButton', () => {
   const onCancelGameMock = jest.fn();
-  const gameId = '1234';
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test('calls onCancelGame with gameId when clicked', () => {
+  test('calls onCancelGame when clicked', () => {
     render(
       <CancelGameButton
         onCancelGame={onCancelGameMock}
-        gameId={gameId}
         isGameIdAvailable={true}
         isCancelling={false}
       />
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'Cancel Upcoming Game' }));
-    expect(onCancelGameMock).toHaveBeenCalledWith(gameId);
+    expect(onCancelGameMock).toHaveBeenCalledTimes(1);
   });
 
   test('is disabled when isGameIdAvailable is false', () => {
     render(
       <CancelGameButton
         onCancelGame={onCancelGameMock}
-        gameId={gameId}
         isGameIdAvailable={false}
         isCancelling={false}
       />
@@ -42,7 +39,6 @@ describe('CancelGameButton', () => {
     render(
       <CancelGameButton
         onCancelGame={onCancelGameMock}
-        gameId={gameId}
         isGameIdAvailable={true}
         isCancelling={true}
       />
@@ -55,7 +51,6 @@ describe('CancelGameButton', () => {
     render(
       <CancelGameButton
         onCancelGame={onCancelGameMock}
-        gameId={gameId}
         isGameIdAvailable={true}
         isCancelling={false}
       />

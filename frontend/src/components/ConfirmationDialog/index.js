@@ -7,7 +7,7 @@ import {
   Button,
 } from '@mui/material';
 
-const CancelDialog = ({ open, onConfirm, onCancel }) => (
+const ConfirmationDialog = ({ open, message, onConfirm, onCancel }) => (
   <Dialog
     open={open}
     onClose={onCancel}
@@ -16,18 +16,18 @@ const CancelDialog = ({ open, onConfirm, onCancel }) => (
   >
     <DialogContent>
       <DialogContentText id="alert-dialog-description">
-        Are you sure you want to cancel sign-up?
+        {message}
       </DialogContentText>
     </DialogContent>
     <DialogActions>
       <Button onClick={onCancel} variant="outlined" color="primary" sx={{ marginRight: 1 }}>
-        No, Keep
+        No
       </Button>
       <Button onClick={onConfirm} variant="contained" color="error">
-        Yes, Cancel
+        Yes
       </Button>
     </DialogActions>
   </Dialog>
 );
 
-export default CancelDialog;
+export default ConfirmationDialog;

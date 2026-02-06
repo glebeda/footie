@@ -4,7 +4,7 @@ import { removePlayer } from '../../redux/slices/signupSlice'
 import { cancelSignUp } from '../../api/signupService'
 import PlayerRow from '../PlayerRow'
 import './PlayerList.css'
-import CancelDialog from '../CancelDialog'
+import ConfirmationDialog from '../ConfirmationDialog'
 import {
   Table,
   TableBody,
@@ -122,9 +122,9 @@ function PlayerList ({ players, maxPlayers, maxSubstitutes, isHighlighting, show
 
         </Table>
       </TableContainer>
-      <CancelDialog
+      <ConfirmationDialog
         open={openDialog}
-        selectedPlayer={selectedPlayer}
+        message='Are you sure you want to cancel sign-up?'
         onConfirm={handleCancelSignUp}
         onCancel={handleCloseDialog}
       />

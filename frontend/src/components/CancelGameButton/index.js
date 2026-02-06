@@ -1,11 +1,10 @@
 import React from 'react'
 import PrimaryButton from '../PrimaryButton'
 
-const CancelGameButton = ({ onCancelGame, gameId, isGameIdAvailable, isCancelling }) => {
-    console.log('isGameIdAvailable:', isGameIdAvailable);
-    return (
+const CancelGameButton = ({ onCancelGame, isGameIdAvailable, isCancelling }) => {
+  return (
     <PrimaryButton
-      onClick={() => onCancelGame(gameId)}
+      onClick={onCancelGame}
       color='secondary'
       disabled={!isGameIdAvailable || isCancelling}
       style={{ marginLeft: 'auto' }}
