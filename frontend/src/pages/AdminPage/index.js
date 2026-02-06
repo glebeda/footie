@@ -17,6 +17,8 @@ import { setGameNotFound } from '../../redux/slices/signupSlice';
 import PlayerListWithTeamSelection from '../../components/PlayerListWithTeamSelection'
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../../components/PageLayout';
+import ConfirmationDialog from '../../components/ConfirmationDialog';
+import AlertComponent from '../../components/AlertComponent';
 
 const AdminPage = () => {
   const dispatch = useDispatch();
@@ -30,6 +32,12 @@ const AdminPage = () => {
   const [teamAssignments, setTeamAssignments] = useState({})
   const { fetchAndSetGameDetails } = useGameDetails();
   const [isIPhone, setIsIPhone] = useState(false); 
+  const [isCancelConfirmationOpen, setIsCancelConfirmationOpen] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    open: false,
+    message: '',
+    severity: 'error',
+  });
 
   useGameDetails();
 
@@ -67,19 +75,40 @@ const AdminPage = () => {
     await updateMultiplePlayersTeams(gameDetails.gameId, teamAssignmentsArray);
   };
 
+  const showAlert = (message, severity = 'error') => {
+    setAlertInfo({ open: true, message, severity });
+  };
+
+  const hideAlert = () => {
+    setAlertInfo({ open: false, message: '', severity: 'error' });
+  };
+
   const handleCancelGame = async () => {
     if (gameDetails) {
       setIsCancelling(true);
       try {
         await updateGameStatus(gameDetails.gameId, 'CANCELLED');
-        alert('Game cancelled successfully');
+        showAlert('Game cancelled successfully', 'success');
         dispatch(setGameNotFound()); 
       } catch (error) {
-        alert(error.message);
+        showAlert(error.message || 'Failed to cancel game. Please try again.');
       } finally {
         setIsCancelling(false);
       }
     }
+  };
+
+  const handleOpenCancelConfirmation = () => {
+    setIsCancelConfirmationOpen(true);
+  };
+
+  const handleCloseCancelConfirmation = () => {
+    setIsCancelConfirmationOpen(false);
+  };
+
+  const handleConfirmCancelGame = async () => {
+    await handleCancelGame();
+    handleCloseCancelConfirmation();
   };
 
   const handleCreateGame = async () => {
@@ -93,10 +122,10 @@ const AdminPage = () => {
 
     try {
       await createGame(gameData);
-      alert('Game scheduled successfully');
+      showAlert('Game scheduled successfully', 'success');
       await fetchAndSetGameDetails();
     } catch (error) {
-      alert(error.message);
+      showAlert(error.message || 'Failed to schedule game. Please try again.');
     }
   }
 
@@ -110,14 +139,14 @@ const AdminPage = () => {
       await handleSaveAssignments();
       if (!isIPhone) {
         await handleCopyTeams();
-        alert('Teams saved and copied to clipboard');
+        showAlert('Teams saved and copied to clipboard', 'success');
       } else {
-        alert('Teams saved successfully'); 
+        showAlert('Teams saved successfully', 'success'); 
       }
       navigate('/'); 
     } catch (error) {
       console.error('Error saving and copying teams:', error);
-      alert('Failed to save and copy teams. Please try again.');
+      showAlert('Failed to save and copy teams. Please try again.');
     }
   };
 
@@ -132,6 +161,13 @@ const AdminPage = () => {
       <Typography variant='h4' gutterBottom>
         Schedule next game
       </Typography>
+      <AlertComponent
+        mode='toast'
+        open={alertInfo.open}
+        message={alertInfo.message}
+        severity={alertInfo.severity}
+        onClose={hideAlert}
+      />
       <TextField
         label='Date and Time'
         type='datetime-local'
@@ -173,8 +209,7 @@ const AdminPage = () => {
               Setup Game
             </PrimaryButton>
             <CancelGameButton
-              onCancelGame={handleCancelGame}
-              gameId={gameDetails?.gameId}
+              onCancelGame={handleOpenCancelConfirmation}
               isGameIdAvailable={!!gameDetails}
               isCancelling={isCancelling}
             />
@@ -202,6 +237,12 @@ const AdminPage = () => {
           </div>
         </>
       )}
+      <ConfirmationDialog
+        open={isCancelConfirmationOpen}
+        message='Are you sure you want to cancel upcoming game?'
+        onConfirm={handleConfirmCancelGame}
+        onCancel={handleCloseCancelConfirmation}
+      />
     </PageLayout>
   )
 }
