@@ -16,6 +16,8 @@ import { addPlayer } from '../../redux/slices/signupSlice';
 import { formatDate } from '../../utils/dateUtils/index';
 import TeamPlayerList from '../../components/TeamPlayerList';
 import PageLayout from '../../components/PageLayout';
+import WeatherForecastCard from '../../components/WeatherForecastCard';
+import { fetchGameWeatherForecast } from '../../api/weatherService';
 import './SignUpPage.css'
 
 const SignUpPage = () => {
@@ -29,6 +31,9 @@ const SignUpPage = () => {
     message: '',
     severity: 'error',
   });
+  const [forecast, setForecast] = useState(null);
+  const [isLoadingForecast, setIsLoadingForecast] = useState(false);
+  const [forecastError, setForecastError] = useState(null);
   useGameDetails()
   
   const showAlert = (message, severity = 'error') => {
@@ -74,6 +79,44 @@ const SignUpPage = () => {
       setSignupOccurred(false);
     }
   }, [signupOccurred]);
+
+  useEffect(() => {
+    if (!gameDetails?.date || !gameDetails?.location) {
+      setForecast(null);
+      setForecastError(null);
+      setIsLoadingForecast(false);
+      return;
+    }
+
+    let isMounted = true
+    setIsLoadingForecast(true)
+    setForecastError(null)
+
+    fetchGameWeatherForecast({
+      location: gameDetails.location,
+      gameDate: gameDetails.date,
+    })
+      .then((weatherData) => {
+        if (isMounted) {
+          setForecast(weatherData)
+        }
+      })
+      .catch((error) => {
+        if (isMounted) {
+          setForecast(null)
+          setForecastError(error.message)
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoadingForecast(false)
+        }
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [gameDetails?.date, gameDetails?.location])
 
   if (isLoadingGameDetails) {
     return <LoadingState />; 
@@ -135,6 +178,13 @@ const SignUpPage = () => {
         showAlert={showAlert}
         hideAlert={hideAlert}
         signupOccurred={signupOccurred}
+      />
+      <WeatherForecastCard
+        gameDateLabel={formatDate(gameDetails.date)}
+        gameLocation={gameDetails.location}
+        loading={isLoadingForecast}
+        error={forecastError}
+        forecast={forecast}
       />
     </PageLayout>
   )
